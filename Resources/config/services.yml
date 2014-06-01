@@ -1,0 +1,11 @@
+parameters:
+#    manager.example.class: EveMapp\Manager\ManagerBundle\Example
+  webservice_user_provider.class: EveMapp\ManagerBundle\Security\UserProvider
+
+services:
+#    manager.example:
+#        class: %manager.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
+
+  webservice_user_provider:
+    class: "%webservice_user_provider.class%"

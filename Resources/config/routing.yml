@@ -1,0 +1,90 @@
+# Login Routes
+login:
+    pattern:  /
+    defaults: { _controller: ManagerBundle:Default:index }
+
+login_check:
+    pattern: /login_check
+
+# Request routes
+request_register:
+    pattern: /request/register
+    defaults: { _controller: ManagerBundle:Request:register }
+
+request_location_self:
+    pattern: /request/location_self
+    defaults: { _controller: ManagerBundle:Request:locationSelf }
+
+request_location_others:
+    pattern: /request/location_others
+    defaults: { _controller: ManagerBundle:Request:locationOthers }
+
+request_event_list:
+    pattern: /request/event_list
+    defaults: { _controller: ManagerBundle:Request:getEventList }
+
+request_event_data:
+    pattern: /request/event_data/{id}
+    defaults: { _controller: ManagerBundle:Request:getEventInformation }
+
+
+# Event Routes
+event_list:
+    pattern: /event
+    defaults: { _controller: ManagerBundle:Event:list }
+
+show_event:
+    pattern: /event/show/{id}
+    defaults: { _controller: ManagerBundle:Event:show }
+
+delete_event:
+    pattern: /event/delete/{id}
+    defaults: { _controller: ManagerBundle:Event:delete }
+
+edit_event:
+    pattern: /event/edit/{id}
+    defaults: { _controller: ManagerBundle:Event:edit }
+
+edit_map_event:
+    pattern: /event/map/edit/{id}
+    defaults: { _controller: ManagerBundle:Event:editMap }
+
+create_event:
+    pattern: /event/create
+    defaults: { _controller: ManagerBundle:Event:create }
+
+# Account Routes
+account_register:
+    path:     /register
+    defaults: { _controller: ManagerBundle:Account:register }
+account_create:
+    path:     /register/create
+    defaults: { _controller: ManagerBundle:Account:create }
+
+# Map Editor Routes
+
+map_request_bounds:
+  path: /event/map/edit/request/bounds
+  defaults: { _controller: ManagerBundle:MapEditor:getBounds }
+
+map_request_sub_tool:
+  path: /event/map/edit/request/subtool/{type}
+  defaults: { _controller: ManagerBundle:MapEditor:getSubtool }
+
+map_request_save:
+  path: /event/map/edit/request/save
+  defaults: { _controller: ManagerBundle:MapEditor:Save }
+
+map_request_image_upload:
+  path: /event/map/edit/request/image/upload
+  defaults: { _controller: ManagerBundle:MapEditor:uploadImage }
+  requirements:
+          _method:  POST
+
+map_request_uploaded_images:
+  path: /event/map/edit/request/image/get
+  defaults: { _controller: ManagerBundle:MapEditor:getUploadedImages }
+
+map_request_delete_image:
+  path: /event/map/edit/request/image/delete/{id}
+  defaults: { _controller: ManagerBundle:MapEditor:deleteImage }

@@ -1,0 +1,34 @@
+<div id="accordion">
+    <h3>Attributes</h3>
+
+    <div id="accordion_attributes">
+        <div class="attr_slider_label">Height:</div>
+        <div id='slider_height' class="attr_slider"></div>
+        <br/>
+
+        <div class="attr_slider_label">Width:</div>
+        <div id='slider_width' class="attr_slider"></div>
+        <br/>
+
+        <div class="attr_slider_label">Angle:</div>
+        <div id='slider_angle' class="attr_slider"></div>
+        <br/>
+    </div>
+    <h3>Choose Image</h3>
+
+    <div id="accordion_image_chooser">
+
+    </div>
+
+    <h3>Upload Image</h3>
+
+    <div id="accordion_image_uploader">
+        <form id="imageUploadForm" action="{{ path('map_request_image_upload') }}" method="POST" {{ form_enctype(form) }}>
+            {{ form_widget(form.file) }}
+            {{ form_widget(form.type) }}
+            {{ form_rest(form) }}
+            {{ form_widget(form.upload) }}
+        </form>
+    </div>
+
+</div>

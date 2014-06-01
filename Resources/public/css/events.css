@@ -1,0 +1,66 @@
+#content {
+    width: 650px;
+    float: left;
+}
+
+#actions {
+    width: 150px;
+    float: right;
+}
+
+#content,
+#actions {
+    background-color: rgba(255, 255, 255, 0.6);
+    margin: 15px;
+    position: relative;
+    display: inline-block;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+#content img {
+    width: 500px;
+
+}
+
+#map {
+    position: relative;
+    display: inline-block;
+    width: 650px;
+    height: 400px;
+    clear: both;
+    margin-top: 20px;
+    margin: 0 auto;
+}
+
+.formElement {
+    margin-bottom: 10px;
+}
+
+.formLabel {
+    font-size: 20px;
+    display: inline-block;
+    width: 100px;
+
+}
+
+.formWidget {
+    display: inline-block;
+    width: 300px;
+}
+
+.formError {
+    color: #ff0000;
+    display: inline-block;
+}
+
+.formWidget input[type='text'] {
+    width: 300px;
+    padding: 2px 2px 2px 5px;
+}
+
+#event_submit {
+    width: 200px;
+    margin-top: 20px;
+    height: 24px;
+}

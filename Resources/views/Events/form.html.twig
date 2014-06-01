@@ -1,0 +1,75 @@
+{% extends "ManagerBundle:Events:base.html.twig" %}
+
+{% block subscripts %}
+    <script src="http://js.arcgis.com/3.9/"></script>
+    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="{{ asset('bundles/manager/js/event/bounds.js') }}"></script>
+    <script src="{{ asset('bundles/manager/js/jquery.datetimepicker.js') }}"></script>
+{% endblock %}
+
+{% block subtitle %}Edit event{% endblock %}
+
+{% block substylesheets %}
+    <link rel="stylesheet" href="http://js.arcgis.com/3.9/js/esri/css/esri.css">
+    <link rel="stylesheet" href="{{ asset('bundles/manager/css/jquery.datetimepicker.css') }}">
+{% endblock %}
+
+{% block subcontent %}
+    <h1>{{ header }}</h1>
+    {{ form_start(form) }}
+
+    <div class="formElement">
+        <div class="formLabel">{{ form_label(form.name) }}</div>
+        <div class="formWidget">{{ form_widget(form.name) }}</div>
+        <div class="formError">{{ form_errors(form.name) }}</div>
+    </div>
+    <div class="formElement">
+        <div class="formLabel">{{ form_label(form.startDate) }}</div>
+        <div class="formWidget">{{ form_widget(form.startDate) }}</div>
+        <div class="formError">{{ form_errors(form.startDate) }}</div>
+    </div>
+
+    <div class="formElement">
+        <div class="formLabel">{{ form_label(form.endDate) }}</div>
+        <div class="formWidget">{{ form_widget(form.endDate) }}</div>
+        <div class="formError">{{ form_errors(form.endDate) }}</div>
+    </div>
+
+    <div class="formElement">
+        <div class="formLabel">{{ form_label(form.description) }}</div>
+        <div class="formWidget">{{ form_widget(form.description) }}</div>
+        <div class="formError">{{ form_errors(form.description) }}</div>
+    </div>
+    <h2>Public image</h2>
+    <div class="formElement">
+        <p>
+            Here you can upload an image to represent your event. This will be publicly available!
+        </p>
+        <div class="formLabel">{{ form_label(form.image.file) }}</div>
+        <div class="formWidget">{{ form_widget(form.image.file) }}</div>
+        <div class="formError">{{ form_errors(form.image.file) }}</div>
+    </div>
+
+    <h2>Map</h2>
+    <div id="boundsChooser">
+        <div class="formElement">
+            <p>
+                To create an accurate map of your event, we need to know where it is located.
+                Please focus the map beneath to indicate where it is. Make sure the map covers all of the terrain.
+            </p>
+
+        </div>
+        <div id="map"></div>
+    </div>
+    <div class="formElement">
+        {{ form_widget(form.eventBounds) }}
+
+        <div class="formSubmit">{{ form_widget(form.submit) }}</div>
+
+    </div>
+
+    {{ form_end(form) }}
+
+
+
+{% endblock %}

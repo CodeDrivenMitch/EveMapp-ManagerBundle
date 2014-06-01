@@ -1,0 +1,40 @@
+<html>
+<head>
+    <title>{% block title %}{% endblock %}</title>
+
+
+    <!-- Main scripts -->
+    <script src="{{ asset('bundles/manager/js/jquery-1.10.2.js') }}"></script>
+    <!-- Page specific scripts -->
+    {% block scripts %} {% endblock %}
+
+
+
+    <!-- Main stylesheets used everywhere -->
+    {% stylesheets 'bundles/manager/css/main.css' filter='cssrewrite' %}
+        <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/manager/css/main.css') }}" />
+    {% endstylesheets %}
+    <link href="//fonts.googleapis.com/css?family=Josefin+Slab:100italic,100,300italic,300,400italic,400,600italic,600,700italic,700"
+          rel="stylesheet" type="text/css">
+    <!-- Page specific stylesheets -->
+    {% block stylesheets %} {% endblock %}
+
+</head>
+<body>
+<div class="pageContainer">
+    {% for flashMessage in app.session.flashbag.get('notice') %}
+        <div class="notice">{{ flashMessage }}</div>
+    {% endfor %}
+    {% for flashMessage in app.session.flashbag.get('error') %}
+        <div class="error">{{ flashMessage }}</div>
+    {% endfor %}
+
+    {% for flashMessage in app.session.flashbag.get('warning') %}
+        <div class="warning">{{ flashMessage }}</div>
+    {% endfor %}
+    {% block content %}
+    {% endblock %}
+</div>
+
+</body>
+</html>

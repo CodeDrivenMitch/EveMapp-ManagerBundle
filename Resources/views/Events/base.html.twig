@@ -1,0 +1,27 @@
+{% extends "ManagerBundle:Default:base.html.twig" %}
+
+{% block title %}{% block subtitle %}{% endblock %} - EveMapp WebManager{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/manager/css/events.css') }}"/>
+    {% block substylesheets %}{% endblock %}
+{% endblock %}
+
+{% block scripts %}
+    {% block subscripts %}{% endblock %}
+{% endblock %}
+
+{% block content %}
+
+    <div id="content">
+        {% block subcontent %}
+        {% endblock %}
+    </div>
+    {% if showactions is defined %}
+    <div id="actions">
+        <h2>Actions</h2>
+        {% block actions %}
+        {% endblock %}
+    </div>
+        {%  endif %}
+{% endblock %}

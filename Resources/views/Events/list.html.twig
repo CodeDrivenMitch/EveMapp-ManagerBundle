@@ -1,0 +1,34 @@
+{% extends "ManagerBundle:Events:base.html.twig" %}
+
+{% block subtitle %}Events - EveMapp WebManager{% endblock %}
+
+{% block substylesheets %}
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/manager/css/event_list.css') }}" />
+{% endblock %}
+
+{% block subcontent %}
+    <h2>Your events</h2>
+    <table class="event_table">
+        <tr>
+            <th>Name</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+        </tr>
+        {% for event in events %}
+            <tr>
+                <td><a href="/event/show/{{ event.id }}">{{ event.name }}</a></td>
+                <td>{{ event.startdate|date("m/d/Y H:i") }}</td>
+                <td>{{ event.enddate|date("m/d/Y H:i") }}</td>
+            </tr>
+
+        {% endfor %}
+
+    </table>
+
+
+{% endblock %}
+
+{% set showactions = true %}
+{% block actions %}
+    <a href="{{ path('create_event') }}">Create event</a>
+{% endblock %}

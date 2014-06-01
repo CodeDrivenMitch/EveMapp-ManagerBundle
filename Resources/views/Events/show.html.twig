@@ -1,0 +1,19 @@
+{% extends "ManagerBundle:Events:base.html.twig" %}
+
+
+{% block subtitle %}{{ event.name }} {% endblock %}
+
+{% block subcontent %}
+    <h2>Event: {{ event.name }}</h2>
+    Date: {{ event.startdate|date("m/d/Y H:i") }} till {{ event.enddate|date("m/d/Y H:i") }}
+    <img src="{{ event.image.getWebPath() }}" />
+{% endblock %}
+
+{% set showactions = true %}
+{% block actions %}
+    <a href="{{ path('edit_event', {'id': event.id }) }}">Edit</a><br/>
+    <a href="{{ path('edit_map_event', {'id': event.id }) }}">Edit Map</a><br/>
+    <a href="{{ path('delete_event', {'id': event.id }) }}">Delete</a><br/>
+    <a href="{{ path('event_list') }}">Go Back</a>
+
+{% endblock %}

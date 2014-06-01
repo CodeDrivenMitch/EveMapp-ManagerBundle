@@ -1,0 +1,6 @@
+{% for image in images %}
+    <div class="mapObjectImage" data-type="{{ image.type }}" data-url="{{ image.getWebPath() }}" >
+        <div class="mapObjectImageDelete" data-image-id="{{ image.id }}"></div>
+        <img src="{{ image.getWebPath() }}" class="mapObjectImage" />
+    </div>
+{% endfor %}
