@@ -8,10 +8,10 @@ require([
 ], function(Map, Extent, SpatialReference) {
     var map;
 
-    var latLow = document.getElementById('event_eventBounds_latLow');
-    var latHigh = document.getElementById('event_eventBounds_latHigh');
-    var lngLow = document.getElementById('event_eventBounds_lngLow');
-    var lngHigh = document.getElementById('event_eventBounds_lngHigh');
+    var latLow = document.getElementById('event_bounds_latLow');
+    var latHigh = document.getElementById('event_bounds_latHigh');
+    var lngLow = document.getElementById('event_bounds_lngLow');
+    var lngHigh = document.getElementById('event_bounds_lngHigh');
 
     var beginExtent = new Extent(latLow.value, lngLow.value,latHigh.value, lngHigh.value, new SpatialReference({ wkid:4326 }));
 

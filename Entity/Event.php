@@ -65,6 +65,14 @@ class Event
 	 */
 	private $image;
 
+	/**
+	 * @var integer
+	 *
+	 * @ORM\OneToOne(targetEntity="EventBounds")
+	 * @ORM\JoinColumn(name="bounds", referencedColumnName="id")
+	 */
+	private $bounds;
+
 
 	protected $eventBounds;
 
@@ -238,5 +246,28 @@ class Event
     public function getImage()
     {
         return $this->image;
+    }
+
+    /**
+     * Set bounds
+     *
+     * @param EventBounds $bounds
+     * @return Event
+     */
+    public function setBounds(EventBounds $bounds)
+    {
+        $this->bounds = $bounds;
+
+        return $this;
+    }
+
+    /**
+     * Get bounds
+     *
+     * @return EventBounds
+     */
+    public function getBounds()
+    {
+        return $this->bounds;
     }
 }

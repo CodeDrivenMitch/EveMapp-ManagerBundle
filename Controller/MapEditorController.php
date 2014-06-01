@@ -23,9 +23,10 @@ class MapEditorController extends Controller {
 		$session = $request->getSession();
 
 		$eventId = $session->get("edit_map_event");
-		$repository = $this->getDoctrine()->getRepository("ManagerBundle:EventBounds");
+		$event = $this->getDoctrine()->getRepository("ManagerBundle:Event")->find($eventId);
 
-		$bounds = $repository->findOneByEventId($eventId);
+		$bounds = $event->getBounds();
+
 
 		$data = array();
 		if($bounds) {
@@ -35,7 +36,6 @@ class MapEditorController extends Controller {
 				'ymin' =>$bounds->getLngLow(),
 				'ymax' => $bounds ->getLngHigh()
 				);
-			$data['zoom'] = $bounds->getZoom();
 		} else return new Response("false");
 
 		$repository = $this->getDoctrine()->getRepository("ManagerBundle:MapObject");

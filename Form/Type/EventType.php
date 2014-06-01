@@ -41,7 +41,7 @@ class EventType extends AbstractType
 			'attr' => array('class' => 'date')
 		));
 		$builder->add('description', 'text');
-		$builder->add('eventBounds', new EventBoundsType());
+		$builder->add('bounds', new EventBoundsType());
 		$builder->add('image', new ImageType());
 		$builder->add('submit', 'submit');
 	}

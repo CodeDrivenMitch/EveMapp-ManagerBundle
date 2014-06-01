@@ -23,15 +23,6 @@ class EventBounds
     private $id;
 
     /**
-     * @var integer
-     *
-     * @ORM\OneToOne(targetEntity="EveMapp\ManagerBundle\Entity\Event")
-     * @ORM\JoinColumn(name="Event", referencedColumnName="id")
-     * @ORM\Column(name="event_id", type="integer")
-     */
-    private $eventId;
-
-    /**
      * @var float
      *
      * @ORM\Column(name="lat_low", type="float")
@@ -60,13 +51,6 @@ class EventBounds
     private $lngHigh;
 
 	/**
-	 * @var integer
-	 *
-	 * @ORM\Column(name="zoom", type="integer")
-	 */
-	private $zoom;
-
-	/**
      * Get id
      *
      * @return integer 
@@ -74,29 +58,6 @@ class EventBounds
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set eventId
-     *
-     * @param integer $eventId
-     * @return EventBounds
-     */
-    public function setEventId($eventId)
-    {
-        $this->eventId = $eventId;
-
-        return $this;
-    }
-
-    /**
-     * Get eventId
-     *
-     * @return integer 
-     */
-    public function getEventId()
-    {
-        return $this->eventId;
     }
 
     /**
@@ -190,20 +151,4 @@ class EventBounds
     {
         return $this->lngHigh;
     }
-
-	/**
-	 * @return integer zoom
-	 */
-	public function getZoom()
-	{
-		return $this->zoom;
-	}
-
-	/**
-	 * @param integer $zoom
-	 */
-	public function setZoom($zoom)
-	{
-		$this->zoom = $zoom;
-	}
 }

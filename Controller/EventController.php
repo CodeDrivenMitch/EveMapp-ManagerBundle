@@ -20,7 +20,12 @@ class EventController extends Controller
 {
 
 
-	public function listAction() {
+	/**
+	 * List all events of the owner in a twig template
+	 * @return \Symfony\Component\HttpFoundation\Response
+	 */
+	public function listAction()
+	{
 		$eventRepository = $this->getDoctrine()->getRepository("ManagerBundle:Event");
 		$userId = $this->getUser()->getId();
 
@@ -28,35 +33,53 @@ class EventController extends Controller
 		return $this->render('ManagerBundle:Events:list.html.twig', array('events' => $events));
 	}
 
-	public function showAction($id) {
+	/**
+	 * Shows the event
+	 * @param $id integer Id of the event
+	 * @return \Symfony\Component\HttpFoundation\Response
+	 */
+	public function showAction($id)
+	{
 		$eventRepository = $this->getDoctrine()->getRepository("ManagerBundle:Event");
 		$event = $eventRepository->find($id);
-		return $this->render('ManagerBundle:Events:show.html.twig', array('event' => $event));
+
+		if ($event->getOwner()->getId() != $this->getUser()->getId()) {
+			$this->addFlash('warning', 'Only the owner can show an event!');
+			$this->redirect($this->generateUrl('event_list'))->send();
+
+		} else {
+			return $this->render('ManagerBundle:Events:show.html.twig', array('event' => $event));
+			// Not the owner's event. Flash it and redirect
+
+		}
+
 	}
 
-	public function editAction(Request $request, $id) {
+	/**
+	 * Shows the edit action for the event
+	 * @param Request $request
+	 * @param $id integer Id of the event
+	 * @return \Symfony\Component\HttpFoundation\Response
+	 */
+	public function editAction(Request $request, $id)
+	{
 		$em = $this->getDoctrine()->getManager();
 
 		$repository = $this->getDoctrine()->getRepository("ManagerBundle:Event");
 		$event = $repository->find($id);
-
-		$bounds = $this->getDoctrine()->getRepository("ManagerBundle:EventBounds")->findOneByEventId($id);
-		$event->setEventBounds($bounds);
-
 
 		$event->setImage($event->getImage());
 
 		$form = $this->createForm(new EventType(), $event);
 		$form->handleRequest($request);
 
-		if($form->isValid()) {
+		if ($form->isValid()) {
 			$event = $form->getData();
 			$event->getImage()->upload();
-			$event->getEventBounds()->setZoom(19);
 
 			$em->persist($event);
 			$em->persist($event->getImage());
-			$em->persist($event->getEventBounds()->setEventId($event->getId()));
+			$em->persist($event->getBounds());
 			$em->flush();
 
 			return $this->redirect($this->generateUrl('show_event', array('id' => $id)))->send();
@@ -70,12 +93,16 @@ class EventController extends Controller
 
 	}
 
-	public function deleteAction($id) {
+	/**
+	 * @param $id integer Id of event to delete
+	 */
+	public function deleteAction($id)
+	{
 		$repository = $this->getDoctrine()->getRepository("ManagerBundle:Event");
 
 		$event = $repository->find($id);
 
-		if($event->getOwner() == $this->getUser()->getId()) {
+		if ($event->getOwner()->getId() == $this->getUser()->getId()) {
 			$em = $this->getDoctrine()->getManager();
 			$em->remove($event);
 			$em->flush();
@@ -90,8 +117,15 @@ class EventController extends Controller
 
 	}
 
-	public function createAction(Request $request) {
-			$em = $this->getDoctrine()->getManager();
+	/**
+	 * Creates a new event
+	 * TODO/BUG: Doesnt save Boundaries!
+	 * @param Request $request
+	 * @return \Symfony\Component\HttpFoundation\Response
+	 */
+	public function createAction(Request $request)
+	{
+		$em = $this->getDoctrine()->getManager();
 
 		$form = $this->createForm(new EventType(), new Event());
 
@@ -101,8 +135,12 @@ class EventController extends Controller
 			$event = $form->getData();
 			$event->setOwner($this->getUser());
 			$event->getImage()->upload();
+
 			$em->persist($event);
+			$em->persist($event->getBounds());
 			$em->persist($event->getImage());
+
+
 
 			$em->flush();
 
@@ -116,18 +154,24 @@ class EventController extends Controller
 		);
 	}
 
-	public function editMapAction(Request $request, $id) {
+	/**
+	 * @param Request $request
+	 * @param $id
+	 * @return \Symfony\Component\HttpFoundation\Response
+	 */
+	public function editMapAction(Request $request, $id)
+	{
 		$repository = $this->getDoctrine()->getRepository("ManagerBundle:Event");
 		$event = $repository->find($id);
-		if(!$this->getUser()) {
+		if (!$this->getUser()) {
 			$this->addFlash("notice", "You must be logged in!");
 			$this->redirect($this->generateUrl('event_list'))->send();
 		}
-		if($this->getUser()->getId() != $event->getOwner()->getId()) {
+		if ($this->getUser()->getId() != $event->getOwner()->getId()) {
 			$this->addFlash('notice', 'You can only edit the map of your own event!');
 			$this->redirect($this->generateUrl('event_list'))->send();
 		}
-		if(!$event) {
+		if (!$event) {
 			$this->addFlash('notice', 'This event does not exist!');
 			$this->redirect($this->generateUrl('event_list'))->send();
 		}
@@ -138,7 +182,13 @@ class EventController extends Controller
 		return $this->render('ManagerBundle:Editor:edit-map-event.html.twig', array('event' => $event));
 	}
 
-	private function addFlash($type, $msg) {
+	/**
+	 * Creates a flash message for the next page visited
+	 * @param $type string type, should be warning/notice
+	 * @param $msg string message shown
+	 */
+	private function addFlash($type, $msg)
+	{
 		$this->get('session')->getFlashBag()->add($type, $msg);
 	}
 } 
