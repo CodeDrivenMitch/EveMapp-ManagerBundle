@@ -40,9 +40,52 @@
 /**
 * EVENT SHOW
 */
-#content img {
-    width: 500px;
+div#event_info, div#event_image {
+    display: inline-block;
+    position: relative;
+    float: left;
+    padding: 3%;
 }
+
+div#event_info {
+    width: 54%;
+}
+
+div#event_image {
+    width: 33%;
+}
+
+img.event_image_thumb {
+    width: 100%;
+}
+
+div.event_info_row {
+    height: 50px;
+    width: 100%;
+}
+
+div.event_info_label {
+    width: 30%;
+    display: inline-block;
+    position: relative;
+}
+
+div.event_info_data {
+    width: 60%;
+    margin: 4%;
+    display: inline-block;
+}
+
+div.event_info_data_date {
+    display: inline-block;
+    width: 40%;
+}
+
+div.event_info_data_time {
+    display: inline-block;
+    width: 40%;
+}
+
 
 /**
 * EVENT FORMS

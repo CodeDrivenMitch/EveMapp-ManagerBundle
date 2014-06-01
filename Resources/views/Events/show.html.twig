@@ -4,9 +4,35 @@
 {% block subtitle %}{{ event.name }} {% endblock %}
 
 {% block subcontent %}
-    <h2>Event: {{ event.name }}</h2>
-    Date: {{ event.startdate|date("m/d/Y H:i") }} till {{ event.enddate|date("m/d/Y H:i") }}
-    <img src="{{ event.image.getWebPath() }}" />
+    <h2>{{ event.name }}</h2>
+
+    <div id="event_info">
+        <div class="event_info_row">
+            <div class="event_info_label">Start:</div>
+            <div class="event_info_data">
+                <div class="event_info_data_date">{{ event.startdate|date("m/d/Y") }}</div>
+                <div class="event_info_data_time">{{ event.startdate|date("H:i") }}</div>
+            </div>
+        </div>
+        <div class="event_info_row">
+            <div class="event_info_label">End:</div>
+            <div class="event_info_data">
+                <div class="event_info_data_date">{{ event.enddate|date("m/d/Y") }}</div>
+                <div class="event_info_data_time">{{ event.enddate|date("H:i") }}</div>
+            </div>
+        </div>
+        <div class="event_info_row">
+            <div class="event_info_label">Description:</div>
+            <div class="event_info_data">
+                {{ event.description }}
+            </div>
+        </div>
+    </div>
+
+    <div id="event_image">
+        <img class="event_image_thumb" src="{{ event.image.getWebPath() }}"/>
+    </div>
+
 {% endblock %}
 
 {% set showactions = true %}
