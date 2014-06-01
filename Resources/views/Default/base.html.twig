@@ -23,14 +23,14 @@
 <body>
 <div class="pageContainer">
     {% for flashMessage in app.session.flashbag.get('notice') %}
-        <div class="notice">{{ flashMessage }}</div>
+        <div class="notice">Notice: {{ flashMessage }}</div>
     {% endfor %}
     {% for flashMessage in app.session.flashbag.get('error') %}
-        <div class="error">{{ flashMessage }}</div>
+        <div class="error">Warning: {{ flashMessage }}</div>
     {% endfor %}
 
     {% for flashMessage in app.session.flashbag.get('warning') %}
-        <div class="warning">{{ flashMessage }}</div>
+        <div class="warning">Warning: {{ flashMessage }}</div>
     {% endfor %}
     {% block content %}
     {% endblock %}

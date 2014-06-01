@@ -11,9 +11,9 @@
 
 {% set showactions = true %}
 {% block actions %}
-    <a href="{{ path('edit_event', {'id': event.id }) }}">Edit</a><br/>
-    <a href="{{ path('edit_map_event', {'id': event.id }) }}">Edit Map</a><br/>
-    <a href="{{ path('delete_event', {'id': event.id }) }}">Delete</a><br/>
-    <a href="{{ path('event_list') }}">Go Back</a>
+    <div class="actionButton"><a href="{{ path('edit_event', {'id': event.id }) }}">Edit</a></div>
+    <div class="actionButton"><a href="{{ path('edit_map_event', {'id': event.id }) }}">Edit Map</a></div>
+    <div class="actionButton"><a href="{{ path('delete_event', {'id': event.id }) }}">Delete</a></div>
+    <div class="actionButton"><a href="{{ path('event_list') }}">Go Back</a></div>
 
 {% endblock %}

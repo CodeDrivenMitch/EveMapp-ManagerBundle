@@ -17,6 +17,10 @@ body {
     overflow: auto;
 }
 
+
+/**
+* LOGIN PAGE
+*/
 div.foo {
     border-radius: 10px;
     background: rgba(255, 255, 255, 0.6);
@@ -40,7 +44,6 @@ div.fooHeader {
     margin: 0 auto;
     text-align: center;
     font-size: 20px;
-
 }
 
 div.foo table {
@@ -109,3 +112,26 @@ h1, h2 {
     text-align: center;
     width: 100%;
 }
+
+/**
+* FLASHES
+*/
+
+div.notice, div.warning {
+    width: 30%;
+    font-size: 18px;
+    border-radius: 5px;
+    margin: 20px auto 0;
+    padding: 20px;
+    text-align: center;
+    background-color: rgba(255, 0, 0, 0.3);
+}
+
+div.notice {
+    color: orange;
+}
+
+div.warning {
+    color: red;
+}
+

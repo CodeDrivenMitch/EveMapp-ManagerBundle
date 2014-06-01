@@ -2,10 +2,6 @@
 
 {% block subtitle %}Events - EveMapp WebManager{% endblock %}
 
-{% block substylesheets %}
-    <link rel="stylesheet" type="text/css" media="screen" href="{{ asset('bundles/manager/css/event_list.css') }}" />
-{% endblock %}
-
 {% block subcontent %}
     <h2>Your events</h2>
     <table class="event_table">
@@ -30,5 +26,6 @@
 
 {% set showactions = true %}
 {% block actions %}
-    <a href="{{ path('create_event') }}">Create event</a>
+    <div class="actionButton"><a href="{{ path('create_event') }}">Create event</a></div>
+    <div class="actionButton"><a href="/logout">Log out</a></div>
 {% endblock %}

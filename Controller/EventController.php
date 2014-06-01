@@ -43,15 +43,18 @@ class EventController extends Controller
 		$eventRepository = $this->getDoctrine()->getRepository("ManagerBundle:Event");
 		$event = $eventRepository->find($id);
 
+		if(!$event) {
+			$this->addFlash('notice', 'This event does not exist!');
+			$this->redirect($this->generateUrl('event_list'))->send();
+		}
 		if ($event->getOwner()->getId() != $this->getUser()->getId()) {
 			$this->addFlash('warning', 'Only the owner can show an event!');
 			$this->redirect($this->generateUrl('event_list'))->send();
 
-		} else {
-			return $this->render('ManagerBundle:Events:show.html.twig', array('event' => $event));
-			// Not the owner's event. Flash it and redirect
-
 		}
+
+		return $this->render('ManagerBundle:Events:show.html.twig', array('event' => $event));
+
 
 	}
 
@@ -68,6 +71,10 @@ class EventController extends Controller
 		$repository = $this->getDoctrine()->getRepository("ManagerBundle:Event");
 		$event = $repository->find($id);
 
+		if(!$event) {
+			$this->addFlash('warning', 'This event does not exist!');
+			$this->redirect($this->generateUrl('event_list'))->send();
+		}
 		$event->setImage($event->getImage());
 
 		$form = $this->createForm(new EventType(), $event);
@@ -163,6 +170,10 @@ class EventController extends Controller
 	{
 		$repository = $this->getDoctrine()->getRepository("ManagerBundle:Event");
 		$event = $repository->find($id);
+		if (!$event) {
+			$this->addFlash('notice', 'This event does not exist!');
+			$this->redirect($this->generateUrl('event_list'))->send();
+		}
 		if (!$this->getUser()) {
 			$this->addFlash("notice", "You must be logged in!");
 			$this->redirect($this->generateUrl('event_list'))->send();
@@ -171,10 +182,7 @@ class EventController extends Controller
 			$this->addFlash('notice', 'You can only edit the map of your own event!');
 			$this->redirect($this->generateUrl('event_list'))->send();
 		}
-		if (!$event) {
-			$this->addFlash('notice', 'This event does not exist!');
-			$this->redirect($this->generateUrl('event_list'))->send();
-		}
+
 
 
 		$request->getSession()->set("edit_map_event", $id);

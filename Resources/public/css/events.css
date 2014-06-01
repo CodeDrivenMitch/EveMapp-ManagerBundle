@@ -1,3 +1,6 @@
+/**
+* EVENTS MAIN
+*/
 #content {
     width: 650px;
     float: left;
@@ -18,20 +21,32 @@
     padding: 10px;
 }
 
+.actionButton {
+    height: 20px;
+    margin: 20px auto;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    border-radius: 5px;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.actionButton a {
+    text-decoration: none;
+    font-size: 18px;
+    color: white;
+}
+
+/**
+* EVENT SHOW
+*/
 #content img {
     width: 500px;
-
 }
 
-#map {
-    position: relative;
-    display: inline-block;
-    width: 650px;
-    height: 400px;
-    clear: both;
-    margin-top: 20px;
-    margin: 0 auto;
-}
+/**
+* EVENT FORMS
+*/
 
 .formElement {
     margin-bottom: 10px;
@@ -63,4 +78,34 @@
     width: 200px;
     margin-top: 20px;
     height: 24px;
+}
+
+#map {
+    position: relative;
+    display: inline-block;
+    width: 650px;
+    height: 400px;
+    clear: both;
+    margin-top: 20px;
+    margin: 0 auto;
+}
+
+/**
+* EVENT LIST
+*/
+
+.event_table {
+    border-radius: 5px;
+    margin: 0 auto;
+    padding: 10px;
+}
+
+
+.event_table th {
+    font-size: 20px;
+    text-align: left;
+}
+
+.event_table td {
+    width: 200px;
 }
