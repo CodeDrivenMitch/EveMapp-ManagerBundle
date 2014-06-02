@@ -45,7 +45,7 @@ require([
 
     // Create the map
     map = new Map("map", {
-        basemap: "hybrid",
+        basemap: "streets   ",
         center: [4.53681008, 51.88391507],
         zoom: 10
     });
