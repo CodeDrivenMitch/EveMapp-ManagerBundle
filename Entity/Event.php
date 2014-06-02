@@ -2,6 +2,9 @@
 
 namespace EveMapp\ManagerBundle\Entity;
 
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\ExecutionContextInterface;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -24,12 +27,28 @@ class Event
     /**
      * @var string
      *
+     * @Assert\NotBlank()
+     * @Assert\Length(
+     *      min = "5",
+     *      max = "20",
+     *      minMessage = "Must be at least {{ limit }} characters length",
+     *      maxMessage = "Must be shorter than {{ limit }} characters length"
+     * )
+     *
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
 
 	/**
 	 * @var string
+	 *
+	 * @Assert\NotBlank()
+	 * @Assert\Length(
+	 *      min = "5",
+	 *      max = "200",
+	 *      minMessage = "Must be at least {{ limit }} characters length",
+	 *      maxMessage = "Must be shorter than {{ limit }} characters length"
+	 * )
 	 *
 	 * @ORM\Column(name="description", type="string", length=255)
 	 */
@@ -38,12 +57,16 @@ class Event
 	/**
      * @var \DateTime
      *
+	 * @Assert\DateTime()
+	 *
      * @ORM\Column(name="startDate", type="datetime")
      */
     private $startDate;
 
     /**
      * @var \DateTime
+     *
+     * @Assert\DateTime()
      *
      * @ORM\Column(name="endDate", type="datetime")
      */
@@ -270,4 +293,34 @@ class Event
     {
         return $this->bounds;
     }
+
+	/**
+	 * Load validator data
+	 * @param ClassMetadata $metadata
+	 */
+	public static function loadValidatorMetadata(ClassMetadata $metadata)
+	{
+		$metadata->addConstraint(new Assert\Callback('validate'));
+	}
+
+	/**
+	 * Validates the datetime constraints
+	 * @param ExecutionContextInterface $context
+	 */
+	public function validate(ExecutionContextInterface $context)
+	{
+		if($this->getStartDate() <= new \DateTime()) {
+			$context->addViolationAt('startDate',
+			'Start date of the event must lie in the future!',
+			array(),
+			null);
+		}
+
+		if($this->getEndDate() <= $this->getStartDate()) {
+			$context->addViolationAt('endDate',
+			'End date cannot be before the start date!',
+			array(),
+			null);
+		}
+	}
 }
