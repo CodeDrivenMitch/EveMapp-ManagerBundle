@@ -25,6 +25,7 @@ class EventBounds
     /**
      * @var float
      *
+     * @Assert\NotNull(message="Center the map on your location!")
      * @ORM\Column(name="lat_low", type="float")
      */
     private $latLow;

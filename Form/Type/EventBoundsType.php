@@ -28,7 +28,8 @@ class EventBoundsType extends AbstractType {
 	public function setDefaultOptions(OptionsResolverInterface $resolver)
 	{
 		$resolver->setDefaults(array(
-			'data_class' => 'EveMapp\ManagerBundle\Entity\EventBounds'
+			'data_class' => 'EveMapp\ManagerBundle\Entity\EventBounds',
+			'cascade_validation' => true
 		));
 	}
 

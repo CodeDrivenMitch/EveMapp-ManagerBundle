@@ -18,27 +18,28 @@
     <h1>{{ header }}</h1>
     {{ form_start(form) }}
 
+    <div class="formErrors">
+        {{ form_errors(form) }}
+    </div>
+
+
     <div class="formElement">
         <div class="formLabel">{{ form_label(form.name) }}</div>
         <div class="formWidget">{{ form_widget(form.name) }}</div>
-        <div class="formError">{{ form_errors(form.name) }}</div>
     </div>
     <div class="formElement">
         <div class="formLabel">{{ form_label(form.startDate) }}</div>
         <div class="formWidget">{{ form_widget(form.startDate) }}</div>
-        <div class="formError">{{ form_errors(form.startDate) }}</div>
     </div>
 
     <div class="formElement">
         <div class="formLabel">{{ form_label(form.endDate) }}</div>
         <div class="formWidget">{{ form_widget(form.endDate) }}</div>
-        <div class="formError">{{ form_errors(form.endDate) }}</div>
     </div>
 
     <div class="formElement">
         <div class="formLabel">{{ form_label(form.description) }}</div>
         <div class="formWidget">{{ form_widget(form.description) }}</div>
-        <div class="formError">{{ form_errors(form.description) }}</div>
     </div>
     <h2>Public image</h2>
     <div class="formElement">
@@ -47,7 +48,6 @@
         </p>
         <div class="formLabel">{{ form_label(form.image.file) }}</div>
         <div class="formWidget">{{ form_widget(form.image.file) }}</div>
-        <div class="formError">{{ form_errors(form.image.file) }}</div>
     </div>
 
     <h2>Map</h2>

@@ -107,7 +107,7 @@ div.event_info_data_time {
     width: 300px;
 }
 
-.formError {
+.formErrors {
     color: #ff0000;
     display: inline-block;
 }

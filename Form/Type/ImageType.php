@@ -33,7 +33,8 @@ class ImageType extends AbstractType {
 	public function setDefaultOptions(OptionsResolverInterface $resolver)
 	{
 		$resolver->setDefaults(array(
-			'data_class' => 'EveMapp\ManagerBundle\Entity\Image'
+			'data_class' => 'EveMapp\ManagerBundle\Entity\Image',
+			'cascade_validation' => true
 		));
 	}
 }

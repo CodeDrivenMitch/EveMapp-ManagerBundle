@@ -36,9 +36,10 @@ class Image {
 	/**
 	 * Sets file.
 	 *
+	 *
 	 * @param UploadedFile $file
 	 */
-	public function setFile(UploadedFile $file = null)
+	public function setFile(UploadedFile $file)
 	{
 		$this->file = $file;
 	}

@@ -49,7 +49,8 @@ class EventType extends AbstractType
 	public function setDefaultOptions(OptionsResolverInterface $resolver)
 	{
 		$resolver->setDefaults(array(
-			'data_class' => 'EveMapp\ManagerBundle\Entity\Event'
+			'data_class' => 'EveMapp\ManagerBundle\Entity\Event',
+			'cascade_validation' => true
 		));
 	}
 }
