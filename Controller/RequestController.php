@@ -3,8 +3,8 @@
 namespace EveMapp\ManagerBundle\Controller;
 
 use EveMapp\ManagerBundle\Entity\LocationEntry;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use EveMapp\ManagerBundle\Entity\User;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -175,12 +175,13 @@ class RequestController extends Controller
 		return new JsonResponse($jsonEvents);
 	}
 
-	public function getEventInformationAction($id) {
+	public function getEventInformationAction($id)
+	{
 		// Get needed data
 		$event = $this->getDoctrine()->getRepository("ManagerBundle:Event")->find($id);
 		$eventBounds = $event->getBounds();
 		$mapObjects = $this->getDoctrine()->getRepository("ManagerBundle:MapObject")
-											->findByEventId($id);
+			->findByEventId($id);
 
 
 		// Create the data
@@ -199,9 +200,8 @@ class RequestController extends Controller
 		));
 
 
-
 		// Add mapobjects
-		foreach($mapObjects as $mObject) {
+		foreach ($mapObjects as $mObject) {
 			array_push($eventData['objects'], array(
 				'id' => $mObject->getObjectId(),
 				'lat' => $mObject->getLat(),
@@ -214,7 +214,6 @@ class RequestController extends Controller
 			));
 
 		}
-
 
 
 		return new JsonResponse($eventData);

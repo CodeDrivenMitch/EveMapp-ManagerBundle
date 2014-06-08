@@ -51,7 +51,7 @@ class AccountController extends Controller
 			$em->flush();
 
 			return $this->redirect("/");
-        }
+		}
 
 		return $this->render(
 			'ManagerBundle:Account:register.html.twig',

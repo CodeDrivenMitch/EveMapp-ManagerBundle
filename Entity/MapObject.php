@@ -2,7 +2,9 @@
 
 namespace EveMapp\ManagerBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use EveMapp\ManagerBundle\Entity\MapObjectPrice;
 
 /**
  * MapObject
@@ -77,12 +79,26 @@ class MapObject
      */
     private $lng;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="url", type="string", length=255)
-     */
-    private $url;
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="url", type="string", length=255)
+	 */
+	private $url;
+
+	/**
+	 * @var string
+	 *
+	 * @ORM\Column(name="desc", type="string", length=255)
+	 */
+	private $description;
+
+	/**
+	 * Bidirectional - One-To-Many (INVERSE SIDE)
+	 *
+	 * @ORM\OneToMany(targetEntity="MapObjectPrice", mappedBy="mapObject", cascade={"persist"})
+	 */
+	private $priceEntries;
 
 
     /**
@@ -300,5 +316,68 @@ class MapObject
     public function getUrl()
     {
         return $this->url;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     * @return MapObject
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string 
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->priceEntries = new ArrayCollection();
+    }
+
+    /**
+     * Add priceEntries
+     *
+     * @param MapObjectPrice $priceEntries
+     * @return MapObject
+     */
+    public function addPriceEntry(MapObjectPrice $priceEntries)
+    {
+        $this->priceEntries[] = $priceEntries;
+
+        return $this;
+    }
+
+    /**
+     * Remove priceEntries
+     *
+     * @param MapObjectPrice $priceEntries
+     */
+    public function removePriceEntry(MapObjectPrice $priceEntries)
+    {
+        $this->priceEntries->removeElement($priceEntries);
+    }
+
+    /**
+     * Get priceEntries
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPriceEntries()
+    {
+        return $this->priceEntries;
     }
 }

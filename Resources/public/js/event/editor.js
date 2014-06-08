@@ -40,8 +40,6 @@ require([
     $('#toolSubchoice').hide();
 
 
-
-
     // Create the map
     map = new Map("map", {
         basemap: "streets",
@@ -69,10 +67,10 @@ require([
             url: "http://web.insidion.com/event/map/edit/request/bounds",
             dataType: 'json',
             async: false,
-            success: function(data) {
+            success: function (data) {
                 // Set map extent and apply it
                 console.log(data);
-                previousZoom =  19;
+                previousZoom = 19;
                 extent = new esri.geometry.Extent(data.bounds);
                 map.setExtent(extent);
 
@@ -90,6 +88,8 @@ require([
                     var graphic = new Graphic(esri.geometry.geographicToWebMercator(geom), symbol);
                     graphic.eveMappObjectId = value.object_id;
                     graphic.eveMappObjectType = value.object_type;
+                    graphic.eveMappObjectInfo = value.object_info;
+                    graphic.eveMappTableId = value.table_id;
 
                     // Add the graphic
                     layer.add(graphic);
@@ -115,14 +115,15 @@ require([
 
         infoToolInitSliders();
         refreshImages();
+        getObjectInformation();
         $("#toolSubchoice").show();
 
     }
 
     function infoToolInitSliders() {
         $('#accordion').accordion({
-                collapsible: true,
-                heightStyle: "content"
+            collapsible: true,
+            heightStyle: "content"
         });
         $("#slider_height").slider({
             min: 1,
@@ -151,7 +152,7 @@ require([
                 layer.redraw();
             }
         });
-        $('#imageUploadForm').ajaxForm(function() {
+        $('#imageUploadForm').ajaxForm(function () {
             refreshImages();
         });
 
@@ -222,6 +223,17 @@ require([
         // set values
         graphic.eveMappObjectId = getAvailableId();
         graphic.eveMappObjectType = selectedSubTool.data('objectType');
+        graphic.eveMappObjectInfo = {
+            desc: "",
+            entries: [
+                {
+                    id: -1,
+                    name: "",
+                    price: 0
+                }
+            ]
+        };
+
         symbol.setAngle(0);
         console.log(graphic);
 
@@ -238,8 +250,6 @@ require([
     }
 
 
-
-
     /**
      * Resizes all graphics in the main layer to the new scale.
      */
@@ -251,7 +261,7 @@ require([
         });
 
         // Also reload sliders
-        if(selectedMarker != null) {
+        if (selectedMarker != null) {
             infoToolInitSliders();
         }
 
@@ -293,7 +303,7 @@ require([
 
             });
 
-            if(selectedTool == "createToolButton") {
+            if (selectedTool == "createToolButton") {
                 $("#toolSubchoice").show();
             }
 
@@ -303,6 +313,9 @@ require([
         })
     }
 
+    /**
+     * Loads the images uploaded for the event, and shows the ones appropriate for the object type.
+     */
     function refreshImages() {
         $.ajax({
             url: "http://web.insidion.com/event/map/edit/request/image/get"
@@ -311,11 +324,11 @@ require([
             $('#mapObjectImage_type').val(selectedMarker.eveMappObjectType);
 
             var count = 0;
-            $.each($("div.mapObjectImage"), function() {
+            $.each($("div.mapObjectImage"), function () {
 
-               var element = $(this);
-                if(element.data('type') == selectedMarker.eveMappObjectType) {
-                    element.click(function() {
+                var element = $(this);
+                if (element.data('type') == selectedMarker.eveMappObjectType) {
+                    element.click(function () {
                         infoToolSetImage(element);
                     });
                     count++;
@@ -324,12 +337,33 @@ require([
                 }
             });
 
-            if(count == 0) {
+            if (count == 0) {
                 $('#accordion_image_chooser').html("You have not uploaded any images for this type of object yet!");
             }
         });
     }
 
+    function getObjectInformation() {
+        $.ajax({
+            type: "POST",
+            url: "http://web.insidion.com/event/map/edit/request/object_info/show",
+            data: {
+                object_type: selectedMarker.eveMappObjectType,
+                object_info: selectedMarker.eveMappObjectInfo
+            }
+        }).done(function (data) {
+            $('#accordion_information').html(data);
+            $('#editMapObjectInfo').click(function () {
+                openMapObjectEditor();
+            });
+
+        })
+    }
+
+    /**
+     * Called when an image is clicked an we need to set that image on the symbol.
+     * @param element Image element which is clicked on.
+     */
     function infoToolSetImage(element) {
 
         selectedMarker.symbol.url = element.data('url');
@@ -359,6 +393,7 @@ require([
             data.objects[data.objects.length] = {
                 object_id: value.eveMappObjectId,
                 object_type: value.eveMappObjectType,
+                object_info: value.eveMappObjectInfo,
                 height: resizeByScale(value.symbol.height, 19, map.getZoom()),
                 width: resizeByScale(value.symbol.width, 19, map.getZoom()),
                 angle: value.symbol.angle,
@@ -375,8 +410,106 @@ require([
                 }
                 setOverlay(false);
 
+
             });
 
+    }
+
+    /**
+     *
+     */
+
+    function openMapObjectEditor() {
+        $.ajax("http://web.insidion.com/event/map/edit/request/map_object_editor")
+            .done(function (data) {
+                setOverlay(true, data);
+                $('#loading_image').hide();
+
+
+                // onchange listener for description
+                var desc = $('#mapObjectEditorDescription');
+                desc.val(selectedMarker.eveMappObjectInfo.desc);
+                desc.change(function () {
+                    selectedMarker.eveMappObjectInfo.desc = $(this).val();
+                });
+
+
+                $.each(selectedMarker.eveMappObjectInfo.entries, addNewRowPriceEditor);
+
+
+                $('#overlayCloser').click(function () {
+                    $('#loading_image').show();
+                    getObjectInformation();
+                    setOverlay(false);
+                    saveRowPriceEditor();
+
+
+                });
+
+                $('#btAddEntry').click(function () {
+                    var newIndex = selectedMarker.eveMappObjectInfo.entries.length;
+                    selectedMarker.eveMappObjectInfo.entries[newIndex] = {
+                        id: -1,
+                        name: "",
+                        price: 0.01
+                    };
+
+                    addNewRowPriceEditor(newIndex, selectedMarker.eveMappObjectInfo.entries[newIndex]);
+                })
+
+            });
+    }
+
+    function addNewRowPriceEditor(index, value) {
+        if (value != null) {
+            var div = $('#mapObjectEditorPrices');
+            var inputString = "<input  class='entryInputName' type='text' data-entry='IndexValue' value='VALUE'/>" +
+                "<input type='number' class='entryInputPrice' data-entry='IndexValue' value='VALUE_PRICE'>";
+
+            var st = inputString.replace("IndexValue", index);
+            st = st.replace("IndexValue", index);
+            st = st.replace("VALUE", value.name);
+            st = st.replace("VALUE_PRICE", value.price);
+            div.append(st);
+
+            setChangeListenersEditor();
+        }
+
+    }
+
+    function saveRowPriceEditor() {
+        $.each(selectedMarker.eveMappObjectInfo.entries, function (index, value) {
+            if (value != null) {
+                if (value.name == "" && value.id != -1) {
+                    $.post("http://web.insidion.com/event/map/edit/map_object/entry/price/delete", {value: JSON.stringify(value)})
+                        .done(function (data) {
+                            if (data != 'false') {
+                                selectedMarker.eveMappObjectInfo.entries[index] = null;
+                            }
+                        });
+                } else if (value.id == -1) {
+                    value.object_id = selectedMarker.eveMappTableId;
+                    console.log(value);
+                    $.post("http://web.insidion.com/event/map/edit/map_object/entry/price/save", {value: JSON.stringify(value)})
+                        .done(function (data) {
+                            if (data != 'false') {
+                                value.index = data;
+                            }
+                        });
+                }
+
+            }
+        });
+    }
+
+    function setChangeListenersEditor() {
+        $('.entryInputName').change(function () {
+            selectedMarker.eveMappObjectInfo.entries[$(this).data('entry')].name = $(this).val();
+        });
+
+        $('.entryInputPrice').change(function () {
+            selectedMarker.eveMappObjectInfo.entries[$(this).data('entry')].price = $(this).val();
+        });
     }
 
 

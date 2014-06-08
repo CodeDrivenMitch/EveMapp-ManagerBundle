@@ -47,12 +47,12 @@
     display: block;
     margin: 200px auto 0;
     width: 400px;
-    height: 300px;
     border-radius: 10px;
     text-align: center;
     padding: 20px;
     font-size: 20px;
     color: white;
+    overflow-y: scroll;
 }
 
 .toolButton {
@@ -169,4 +169,26 @@ div#infoTooltip {
     bottom: 13%;
     width: 95%;
     margin: 2%;
+}
+
+#btAddEntry {
+    width: 130px;
+    padding: 10px;
+    margin: 20px;
+    float: left;
+    height: 40px;
+    background-color: rgba(255, 255, 255, 0.8);
+    color: black;
+    border-radius: 5px;
+}
+
+#overlayCloser {
+    width: 130px;
+    padding: 10px;
+    margin: 20px;
+    float: right;
+    height: 40px;
+    background-color: rgba(255, 255, 255, 0.8);
+    color: black;
+    border-radius: 5px;
 }

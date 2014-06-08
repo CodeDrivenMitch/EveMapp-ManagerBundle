@@ -10,8 +10,6 @@ namespace EveMapp\ManagerBundle\Controller;
 
 
 use EveMapp\ManagerBundle\Entity\Event;
-use EveMapp\ManagerBundle\Entity\EventBounds;
-use EveMapp\ManagerBundle\Form\Type\EventBoundsType;
 use EveMapp\ManagerBundle\Form\Type\EventType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;

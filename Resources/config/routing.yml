@@ -88,3 +88,19 @@ map_request_uploaded_images:
 map_request_delete_image:
   path: /event/map/edit/request/image/delete/{id}
   defaults: { _controller: ManagerBundle:MapEditor:deleteImage }
+
+map_request_mapobject_info_show:
+  path: /event/map/edit/request/object_info/show
+  defaults: { _controller: ManagerBundle:MapEditor:showObjectInfo }
+
+map_request_mapobject_editor:
+  path: /event/map/edit/request/map_object_editor
+  defaults: { _controller: ManagerBundle:MapEditor:mapObjectEditor }
+
+map_request_mapobject_price_entry_save:
+  path: /event/map/edit/map_object/entry/price/save
+  defaults: { _controller: ManagerBundle:MapEditor:priceEntrySave }
+
+map_request_mapobject_price_entry_delete:
+  path: /event/map/edit/map_object/entry/price/delete
+  defaults: { _controller: ManagerBundle:MapEditor:priceEntryDelete }

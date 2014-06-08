@@ -1,0 +1,16 @@
+<div class="mapObjectDescription">Description: {{ info.desc }} </div>
+<h4>Prices</h4>
+<div class="mapObjectPrices">
+
+
+    {% for entry in info.entries %}
+        {% if entry.name != "" %}
+            <div class="mapObjectPriceEntry">
+                {{ entry.name|capitalize }}: {{ entry.price }}
+            </div>
+        {% endif %}
+    {% endfor %}
+
+    <div id="editMapObjectInfo">Edit the information</div>
+
+</div>
