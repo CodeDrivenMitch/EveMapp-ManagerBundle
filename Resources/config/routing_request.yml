@@ -1,0 +1,20 @@
+# Request routes
+request_register:
+    pattern: /request/register
+    defaults: { _controller: ManagerBundle:Request:register }
+
+request_location_self:
+    pattern: /request/location_self
+    defaults: { _controller: ManagerBundle:Request:locationSelf }
+
+request_location_others:
+    pattern: /request/location_others
+    defaults: { _controller: ManagerBundle:Request:locationOthers }
+
+request_event_list:
+    pattern: /request/event_list
+    defaults: { _controller: ManagerBundle:Request:getEventList }
+
+request_event_data:
+    pattern: /request/event_data/{id}
+    defaults: { _controller: ManagerBundle:Request:getEventInformation }

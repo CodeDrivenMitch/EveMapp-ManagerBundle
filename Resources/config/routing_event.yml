@@ -1,0 +1,24 @@
+# Event Routes
+event_list:
+    pattern: /event
+    defaults: { _controller: ManagerBundle:Event:list }
+
+show_event:
+    pattern: /event/show/{id}
+    defaults: { _controller: ManagerBundle:Event:show }
+
+delete_event:
+    pattern: /event/delete/{id}
+    defaults: { _controller: ManagerBundle:Event:delete }
+
+edit_event:
+    pattern: /event/edit/{id}
+    defaults: { _controller: ManagerBundle:Event:edit }
+
+edit_map_event:
+    pattern: /event/map/edit/{id}
+    defaults: { _controller: ManagerBundle:Event:editMap }
+
+create_event:
+    pattern: /event/create
+    defaults: { _controller: ManagerBundle:Event:create }
