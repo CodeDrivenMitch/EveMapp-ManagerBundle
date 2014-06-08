@@ -50,6 +50,7 @@ class MapEditorController extends Controller
 
 			$entries = array();
 
+			// Determine which property this mapObject should have and act accordingly
 			switch ($this->getObjectInfoByType($object->getType())) {
 				case 'prices':
 					foreach ($object->getPriceEntries() as $entry) {
@@ -60,6 +61,7 @@ class MapEditorController extends Controller
 						));
 					}
 
+					// Add an empty row, so it gets shown upon opening the editor
 					if (count($entries) == 0) {
 						array_push($entries, array(
 							'id' => -1,
@@ -100,6 +102,12 @@ class MapEditorController extends Controller
 			case "FoodStand":
 				return 'prices';
 				break;
+			case "Toilet":
+				return 'prices';
+			break;
+			case "MarketStall":
+				return 'prices';
+			break;
 			default:
 				return 'none';
 				break;

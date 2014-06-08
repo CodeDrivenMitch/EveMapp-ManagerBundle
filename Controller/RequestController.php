@@ -202,6 +202,31 @@ class RequestController extends Controller
 
 		// Add mapobjects
 		foreach ($mapObjects as $mObject) {
+
+			$entries = array();
+
+			// Determine which property this mapObject should have and act accordingly
+			switch ($this->getObjectInfoByType($mObject->getType())) {
+				case 'prices':
+					foreach ($mObject->getPriceEntries() as $entry) {
+						array_push($entries, array(
+							'id' => $entry->getId(),
+							'name' => $entry->getName(),
+							'price' => $entry->getPrice()
+						));
+					}
+
+					// Add an empty row, so it gets shown upon opening the editor
+					if (count($entries) == 0) {
+						array_push($entries, array(
+							'id' => -1,
+							'name' => '',
+							'price' => 0
+						));
+					}
+					break;
+
+			}
 			array_push($eventData['objects'], array(
 				'id' => $mObject->getObjectId(),
 				'lat' => $mObject->getLat(),
@@ -210,13 +235,33 @@ class RequestController extends Controller
 				'image_url' => $mObject->getUrl(),
 				'width' => $mObject->getWidth(),
 				'height' => $mObject->getHeight(),
-				'angle' => $mObject->getAngle()
+				'angle' => $mObject->getAngle(),
+				'desc' => $mObject->getDescription(),
+				'entries' => $entries
 			));
 
 		}
 
 
 		return new JsonResponse($eventData);
+	}
+
+	private function getObjectInfoByType($objectType)
+	{
+		switch ($objectType) {
+			case "FoodStand":
+				return 'prices';
+				break;
+			case "Toilet":
+				return 'prices';
+				break;
+			case "MarketStall":
+				return 'prices';
+				break;
+			default:
+				return 'none';
+				break;
+		}
 	}
 
 	/**
