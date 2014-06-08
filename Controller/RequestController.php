@@ -186,83 +186,14 @@ class RequestController extends Controller
 
 		// Create the data
 		$eventData = array(
-			"bounds" => array(),
-			"objects" => array(),
-			"objectData" => array()
+			"bounds" => $this->get('manager_o2a')->mapBoundsToArray($eventBounds),
+			"objects" => $this->get('manager_o2a')->mapObjectsToArray($mapObjects)
 		);
-
-		// Add bounds data
-		array_push($eventData['bounds'], array(
-			'xmin' => $eventBounds->getLatLow(),
-			'xmax' => $eventBounds->getLatHigh(),
-			'ymin' => $eventBounds->getLngLow(),
-			'ymax' => $eventBounds->getLngHigh()
-		));
-
-
-		// Add mapobjects
-		foreach ($mapObjects as $mObject) {
-
-			$entries = array();
-
-			// Determine which property this mapObject should have and act accordingly
-			switch ($this->getObjectInfoByType($mObject->getType())) {
-				case 'prices':
-					foreach ($mObject->getPriceEntries() as $entry) {
-						array_push($entries, array(
-							'id' => $entry->getId(),
-							'name' => $entry->getName(),
-							'price' => $entry->getPrice()
-						));
-					}
-
-					// Add an empty row, so it gets shown upon opening the editor
-					if (count($entries) == 0) {
-						array_push($entries, array(
-							'id' => -1,
-							'name' => '',
-							'price' => 0
-						));
-					}
-					break;
-
-			}
-			array_push($eventData['objects'], array(
-				'id' => $mObject->getObjectId(),
-				'lat' => $mObject->getLat(),
-				'lng' => $mObject->getLng(),
-				'type' => $mObject->getType(),
-				'image_url' => $mObject->getUrl(),
-				'width' => $mObject->getWidth(),
-				'height' => $mObject->getHeight(),
-				'angle' => $mObject->getAngle(),
-				'desc' => $mObject->getDescription(),
-				'entries' => $entries
-			));
-
-		}
-
 
 		return new JsonResponse($eventData);
 	}
 
-	private function getObjectInfoByType($objectType)
-	{
-		switch ($objectType) {
-			case "FoodStand":
-				return 'prices';
-				break;
-			case "Toilet":
-				return 'prices';
-				break;
-			case "MarketStall":
-				return 'prices';
-				break;
-			default:
-				return 'none';
-				break;
-		}
-	}
+
 
 	/**
 	 * Creates a simple page with the error

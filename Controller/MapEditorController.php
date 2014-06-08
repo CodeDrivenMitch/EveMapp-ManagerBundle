@@ -45,84 +45,18 @@ class MapEditorController extends Controller
 
 		$objects = $repository->findByEventId($eventId);
 
-		$data['objects'] = array();
-		foreach ($objects as $object) {
-
-			$entries = array();
-
-			// Determine which property this mapObject should have and act accordingly
-			switch ($this->getObjectInfoByType($object->getType())) {
-				case 'prices':
-					foreach ($object->getPriceEntries() as $entry) {
-						array_push($entries, array(
-							'id' => $entry->getId(),
-							'name' => $entry->getName(),
-							'price' => $entry->getPrice()
-						));
-					}
-
-					// Add an empty row, so it gets shown upon opening the editor
-					if (count($entries) == 0) {
-						array_push($entries, array(
-							'id' => -1,
-							'name' => '',
-							'price' => 0
-						));
-					}
-					break;
-
-			}
-
-
-			array_push($data['objects'], array(
-				'width' => $object->getWidth(),
-				'height' => $object->getHeight(),
-				'object_id' => $object->getObjectId(),
-				'angle' => $object->getAngle(),
-				'image_url' => $object->getUrl(),
-				'lat' => $object->getLat(),
-				'lng' => $object->getLng(),
-				'object_type' => $object->getType(),
-				'table_id' => $object->getId(),
-				'object_info' => array(
-					'desc' => $object->getDescription(),
-					'entries' => $entries
-				)
-			));
-
-
-		}
+		$data['objects'] = $this->get('manager_o2a')->mapObjectsToArray($objects);
 
 		return new JsonResponse($data);
 	}
 
-	private function getObjectInfoByType($objectType)
-	{
-		switch ($objectType) {
-			case "FoodStand":
-				return 'prices';
-				break;
-			case "Toilet":
-				return 'prices';
-			break;
-			case "MarketStall":
-				return 'prices';
-			break;
-			default:
-				return 'none';
-				break;
-		}
-	}
-
-	public function getSubtoolAction(Request $request, $type)
+	public function getSubtoolAction($type)
 	{
 		switch ($type) {
 			case "createToolButton":
 				return $this->render('ManagerBundle:Editor:createToolSubChoice.html.twig', array());
 				break;
 			case "infoToolButton":
-
-
 				$form = $this->createForm(new MapObjectImageType, new MapObjectImage());
 				return $this->render('ManagerBundle:Editor:infoToolSubChoice.html.twig', array(
 					'form' => $form->createView()));
@@ -179,29 +113,31 @@ class MapEditorController extends Controller
 			}
 
 			foreach ($object['object_info']['entries'] as $entry) {
+				if ($entry != null) {
 
-				switch ($this->getObjectInfoByType($object['object_type'])) {
-					case 'prices':
+					switch ($this->get('map_object_type_resolver')->getEntryType($object['object_type'])) {
+						case 'prices':
 
-						$priceEntry = $repositoryPrices->find($entry['id']);
+							$priceEntry = $repositoryPrices->find($entry['id']);
 
-						if (!$priceEntry) {
-							$priceEntry = new MapObjectPrice();
-						}
-
-						if ($entry['name'] != "") {
-							$priceEntry->setName($entry['name']);
-							$priceEntry->setPrice($entry['price']);
-
-							$priceEntry->setMapObject($newObject);
-							$newObject->addPriceEntry($priceEntry);
-						} else {
-							if ($priceEntry) {
-								$newObject->removePriceEntry($priceEntry);
-								$em->remove($priceEntry);
+							if (!$priceEntry) {
+								$priceEntry = new MapObjectPrice();
 							}
-						}
-						break;
+
+							if ($entry['name'] != "") {
+								$priceEntry->setName($entry['name']);
+								$priceEntry->setPrice($entry['price']);
+
+								$priceEntry->setMapObject($newObject);
+								$newObject->addPriceEntry($priceEntry);
+							} else {
+								if ($priceEntry) {
+									$newObject->removePriceEntry($priceEntry);
+									$em->remove($priceEntry);
+								}
+							}
+							break;
+					}
 				}
 
 			}
@@ -276,7 +212,7 @@ class MapEditorController extends Controller
 			return new Response("false");
 		}
 
-		switch ($this->getObjectInfoByType($objectType)) {
+		switch ($this->get('map_object_type_resolver')->getEntryType($objectType)) {
 			case 'prices':
 				return $this->showObjectWithPrices($objectInfo);
 				break;

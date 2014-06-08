@@ -86,14 +86,16 @@ require([
                     // Make graphic
                     var geom = new Point(value.lat, value.lng);
                     var graphic = new Graphic(esri.geometry.geographicToWebMercator(geom), symbol);
-                    graphic.eveMappObjectId = value.object_id;
-                    graphic.eveMappObjectType = value.object_type;
-                    graphic.eveMappObjectInfo = value.object_info;
+                    graphic.eveMappObjectId = value.id;
+                    graphic.eveMappObjectType = value.type;
+                    graphic.eveMappObjectInfo = {
+                        desc: value.desc,
+                        entries: value.entries
+                    };
                     graphic.eveMappTableId = value.table_id;
 
                     // Add the graphic
                     layer.add(graphic);
-                    // set zoom
 
                 });
                 map.addLayer(layer);

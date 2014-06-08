@@ -1,11 +1,13 @@
 parameters:
-#    manager.example.class: EveMapp\Manager\ManagerBundle\Example
   webservice_user_provider.class: EveMapp\ManagerBundle\Security\UserProvider
+  map_object_type_resolver.class: EveMapp\ManagerBundle\Services\MapObjectEntryTypeResolver
+  manager_o2a.class: EveMapp\ManagerBundle\Services\ObjectToArrayService
 
 services:
-#    manager.example:
-#        class: %manager.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
-
   webservice_user_provider:
     class: "%webservice_user_provider.class%"
+  map_object_type_resolver:
+    class: "%map_object_type_resolver.class%"
+  manager_o2a:
+    class: "%manager_o2a.class%"
+    arguments: ["@map_object_type_resolver"]
