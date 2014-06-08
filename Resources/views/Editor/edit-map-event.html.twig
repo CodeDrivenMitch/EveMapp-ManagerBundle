@@ -1,50 +1,53 @@
 <html>
-    <head>
-        <title>Editing {{ event.name }} - EveMapp WebManager</title>
-        <link rel="stylesheet" type="text/css" href="{{ asset('bundles/manager/css/event_edit.css') }}"/>
-        <link rel="stylesheet" type="text/css" href="{{ asset('bundles/manager/css/main.css') }}"/>
-        <script src="http://js.arcgis.com/3.9/"></script>
-        <script src="{{ asset('bundles/manager/js/jquery-1.10.2.js') }}"></script>
-        <script src="{{ asset('bundles/manager/js/jquery-ui-1.10.4.js') }}"></script>
-        <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
-        <link rel="stylesheet" href="http://js.arcgis.com/3.9/js/esri/css/esri.css">
-        <script src="{{ asset('bundles/manager/js/event/editor_ui.js') }}"></script>
-        <script src="{{ asset('bundles/manager/js/event/editor.js') }}"></script>
-        <script src="http://malsup.github.io/jquery.form.js"></script>
+<head>
+    <title>Editing {{ event.name }} - EveMapp WebManager</title>
+    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/manager/css/event_edit.css') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/manager/css/main.css') }}"/>
+    <script src="http://js.arcgis.com/3.9/"></script>
+    <script src="{{ asset('bundles/manager/js/jquery-1.10.2.js') }}"></script>
+    <script src="{{ asset('bundles/manager/js/jquery-ui-1.10.4.js') }}"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="http://js.arcgis.com/3.9/js/esri/css/esri.css">
+    <script src="{{ asset('bundles/manager/js/event/editor_ui.js') }}"></script>
+    <script src="{{ asset('bundles/manager/js/event/editor.js') }}"></script>
+    <script src="http://malsup.github.io/jquery.form.js"></script>
 
 
-    </head>
+</head>
 </html>
 <body>
-    <div id="container">
+<div id="container">
 
-        <div id="map"></div>
-        <div id="toolbar">
-            <div id="infoToolButton" class="toolButton tooltipAble" data-tooltip="Info and Edit tool">
-                <img src="{{ asset('bundles/manager/images/symbols/info.png') }}"/>
-            </div>
-            <div id="dragToolButton" class="toolButton tooltipAble" data-tooltip="Drag objects">
-                <img src="{{ asset('bundles/manager/images/symbols/move.png') }}"/>
-            </div>
-            <div id="createToolButton" class="toolButton tooltipAble " data-tooltip="Create new objects!">
-                <img src="http://placehold.it/100x100"/>
-            </div>
-            <div id="deleteToolButton" class="toolButton tooltipAble" data-tooltip="Delete objects">
-                <img src="{{ asset('bundles/manager/images/symbols/delete.png') }}"/>
-            </div>
-
-            <div id="toolSubchoice"></div>
-
-            <div id="saveButton">Save</div>
-            <div id="resetButton">Reset</div>
-
+    <div id="map"></div>
+    <div id="toolbar">
+        <div id="infoToolButton" class="toolButton tooltipAble" data-tool="info" data-tooltip="Info and Edit tool">
+            <img src="{{ asset('bundles/manager/images/symbols/info.png') }}"/>
         </div>
-    </div>
-    <div id="overlay">
-        <div id="overlay_content">
-            <div id="loading_image"><img src="{{ asset('bundles/manager/images/loading1.gif') }}"/></div>
-            <div id="message">Loading map..</div>
+        <div id="dragToolButton" class="toolButton tooltipAble" data-tool="drag" data-tooltip="Drag objects">
+            <img src="{{ asset('bundles/manager/images/symbols/move.png') }}"/>
+        </div>
+        <div id="createToolButton" class="toolButton tooltipAble" data-tool="create" data-tooltip="Create new objects!">
+            <img src="http://placehold.it/100x100"/>
+        </div>
+        <div id="deleteToolButton" class="toolButton tooltipAble" data-tool="delete" data-tooltip="Delete objects">
+            <img src="{{ asset('bundles/manager/images/symbols/delete.png') }}"/>
         </div>
 
+        <div id="toolSubchoice"></div>
+        <div id="infoTooltip"></div>
+
+        <div id="saveButton" class="tooltipAble" data-tooltip="Saves the created map to the server. Changes are immediately visible in every aspect of the platform.">Save</div>
+        <a href="{{ path('edit_event', {'id': event.id }) }}">
+            <div id="resetButton" class="tooltipAble" data-tooltip="Return to overview of the event.">Back</div>
+        </a>
+
     </div>
+</div>
+<div id="overlay">
+    <div id="overlay_content">
+        <div id="loading_image"><img src="{{ asset('bundles/manager/images/loading1.gif') }}"/></div>
+        <div id="message">Loading map..</div>
+    </div>
+
+</div>
 </body>

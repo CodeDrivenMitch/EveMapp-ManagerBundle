@@ -19,7 +19,6 @@ var lastDeletedMarker;
 var takenIds = [];
 var deletedIds = [];
 var previousZoom;
-var originalZoom;
 
 /**
  * Code which needs Dojo/Esri Arcgis SDK
@@ -45,7 +44,7 @@ require([
 
     // Create the map
     map = new Map("map", {
-        basemap: "streets   ",
+        basemap: "streets",
         center: [4.53681008, 51.88391507],
         zoom: 10
     });
@@ -73,8 +72,7 @@ require([
             success: function(data) {
                 // Set map extent and apply it
                 console.log(data);
-                previousZoom =  data.zoom;
-                originalZoom = data.zoom;
+                previousZoom =  19;
                 extent = new esri.geometry.Extent(data.bounds);
                 map.setExtent(extent);
 
@@ -263,21 +261,6 @@ require([
 
     }
 
-
-    /**
-     * Sequence executed when the reset button is clicked.
-     */
-    function reset() {
-        setOverlay(true, "Resetting the map..");
-        map.removeLayer(layer);
-        layer = null;
-        selectedMarker = null;
-        deletedIds = [];
-        loadMapData();
-        resizeGraphics();
-        setOverlay(false);
-    }
-
     /**
      * TOOL BUTTON HANDLERS
      */
@@ -376,8 +359,8 @@ require([
             data.objects[data.objects.length] = {
                 object_id: value.eveMappObjectId,
                 object_type: value.eveMappObjectType,
-                height: resizeByScale(value.symbol.height, originalZoom, map.getZoom()),
-                width: resizeByScale(value.symbol.width, originalZoom, map.getZoom()),
+                height: resizeByScale(value.symbol.height, 19, map.getZoom()),
+                width: resizeByScale(value.symbol.width, 19, map.getZoom()),
                 angle: value.symbol.angle,
                 image_url: value.symbol.url,
                 lat: latLongPoint.x,
@@ -421,10 +404,6 @@ require([
 
         $('#saveButton').click(function (event) {
             saveButtonClick(event);
-        });
-
-        $('#resetButton').click(function() {
-            reset();
         });
 
         /**

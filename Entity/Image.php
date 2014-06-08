@@ -21,12 +21,12 @@ class Image {
 	 * @ORM\Column(type="integer")
 	 * @ORM\GeneratedValue(strategy="AUTO")
 	 */
-	public $id;
+	private $id;
 
 	/**
 	 * @ORM\Column(type="string", length=255)
 	 */
-	public $path;
+	private $path;
 
 	/**
 	 * @Assert\File(maxSize="6000000")

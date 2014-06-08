@@ -10,10 +10,20 @@
  * Calling this functions applies the data-tooltip elements to the Jquery UI tooltip
  */
 function createTooltips() {
+    var tooltipDiv = $('#infoTooltip');
+
     $.each($('.tooltipAble'), function() {
-        $(this).tooltip({
-            content: $(this).data('tooltip'),
-            items: 'div'
+
+        $(this).mouseenter(function() {
+            tooltipDiv.finish();
+            tooltipDiv.html($(this).data('tooltip'));
+            tooltipDiv.fadeIn();
+        });
+
+        $(this).mouseleave(function() {
+            tooltipDiv.finish();
+            tooltipDiv.fadeOut();
+
         })
     })
 }

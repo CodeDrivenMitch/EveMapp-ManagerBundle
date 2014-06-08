@@ -177,18 +177,17 @@ class RequestController extends Controller
 
 	public function getEventInformationAction($id) {
 		// Get needed data
-		$eventBounds = $this->getDoctrine()->getRepository("ManagerBundle:EventBounds")
-			->findOneBy(array("eventId" => $id));
+		$event = $this->getDoctrine()->getRepository("ManagerBundle:Event")->find($id);
+		$eventBounds = $event->getBounds();
 		$mapObjects = $this->getDoctrine()->getRepository("ManagerBundle:MapObject")
-											->findBy(array("eventId" => $id));
+											->findByEventId($id);
 
 
 		// Create the data
 		$eventData = array(
 			"bounds" => array(),
 			"objects" => array(),
-			"objectData" => array(),
-			"zoom" =>$eventBounds->getZoom()
+			"objectData" => array()
 		);
 
 		// Add bounds data

@@ -8,8 +8,8 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * LocationEntry
  *
- * @ORM\Table()
- * @ORM\Entity
+ * @ORM\Table(name="LocationEntry")
+ * @ORM\Entity()
  */
 class LocationEntry
 {
