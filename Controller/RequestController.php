@@ -175,6 +175,7 @@ class RequestController extends Controller
 		return new JsonResponse($jsonEvents);
 	}
 
+
 	public function getEventInformationAction($id)
 	{
 		// Get needed data
@@ -186,7 +187,7 @@ class RequestController extends Controller
 
 		// Create the data
 		$eventData = array(
-			"bounds" => $this->get('manager_o2a')->mapBoundsToArray($eventBounds),
+			"bounds" => array($this->get('manager_o2a')->mapBoundsToArray($eventBounds)),
 			"objects" => $this->get('manager_o2a')->mapObjectsToArray($mapObjects)
 		);
 

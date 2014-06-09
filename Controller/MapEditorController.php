@@ -27,25 +27,14 @@ class MapEditorController extends Controller
 
 		$eventId = $session->get("edit_map_event");
 		$event = $this->getDoctrine()->getRepository("ManagerBundle:Event")->find($eventId);
-
+		$objects = $this->getDoctrine()->getRepository("ManagerBundle:MapObject")->findByEventId($eventId);
 		$bounds = $event->getBounds();
 
 
-		$data = array();
-		if ($bounds) {
-			$data['bounds'] = array(
-				'xmin' => $bounds->getLatLow(),
-				'xmax' => $bounds->getLatHigh(),
-				'ymin' => $bounds->getLngLow(),
-				'ymax' => $bounds->getLngHigh()
-			);
-		} else return new Response("false");
-
-		$repository = $this->getDoctrine()->getRepository("ManagerBundle:MapObject");
-
-		$objects = $repository->findByEventId($eventId);
-
-		$data['objects'] = $this->get('manager_o2a')->mapObjectsToArray($objects);
+		$data = array(
+			'bounds' => $this->get('manager_o2a')->mapBoundsToArray($bounds),
+			'objects' => $this->get('manager_o2a')->mapObjectsToArray($objects)
+		);
 
 		return new JsonResponse($data);
 	}
@@ -216,6 +205,8 @@ class MapEditorController extends Controller
 			case 'prices':
 				return $this->showObjectWithPrices($objectInfo);
 				break;
+			case 'times':
+				return $this->showObjectWithTimes($objectInfo);
 			default:
 				return new Response("This one is not implemented yet!");
 				break;
@@ -275,5 +266,12 @@ class MapEditorController extends Controller
 		}
 
 		return new Response('false');
+	}
+
+	private function showObjectWithTimes($info)
+	{
+		return $this->render('ManagerBundle:MapObjectInfo:times.html.twig', array(
+			'info' => $info
+		));
 	}
 } 

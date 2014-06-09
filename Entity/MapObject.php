@@ -4,6 +4,7 @@ namespace EveMapp\ManagerBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use EveMapp\ManagerBundle\Entity\MapObjectLineUpEntry;
 use EveMapp\ManagerBundle\Entity\MapObjectPrice;
 
 /**
@@ -99,6 +100,13 @@ class MapObject
 	 * @ORM\OneToMany(targetEntity="MapObjectPrice", mappedBy="mapObject", cascade={"persist"})
 	 */
 	private $priceEntries;
+
+	/**
+	 * Bidirectional - One-To-Many (INVERSE SIDE)
+	 *
+	 * @ORM\OneToMany(targetEntity="MapObjectLineUpEntry", mappedBy="mapObject", cascade={"persist"})
+	 */
+	private $lineUpEntries;
 
 
     /**
@@ -379,5 +387,38 @@ class MapObject
     public function getPriceEntries()
     {
         return $this->priceEntries;
+    }
+
+    /**
+     * Add lineUpEntries
+     *
+     * @param MapObjectLineUpEntry $lineUpEntries
+     * @return MapObject
+     */
+    public function addLineUpEntry(MapObjectLineUpEntry $lineUpEntries)
+    {
+        $this->lineUpEntries[] = $lineUpEntries;
+
+        return $this;
+    }
+
+    /**
+     * Remove lineUpEntries
+     *
+     * @param MapObjectLineUpEntry $lineUpEntries
+     */
+    public function removeLineUpEntry(MapObjectLineUpEntry $lineUpEntries)
+    {
+        $this->lineUpEntries->removeElement($lineUpEntries);
+    }
+
+    /**
+     * Get lineUpEntries
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getLineUpEntries()
+    {
+        return $this->lineUpEntries;
     }
 }

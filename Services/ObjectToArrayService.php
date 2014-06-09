@@ -9,6 +9,8 @@
 namespace EveMapp\ManagerBundle\Services;
 
 
+use Symfony\Component\Validator\Constraints\DateTime;
+
 class ObjectToArrayService
 {
 
@@ -43,6 +45,26 @@ class ObjectToArrayService
 							'id' => -1,
 							'name' => '',
 							'price' => 0
+						));
+					}
+					break;
+
+				case 'times':
+					foreach($object->getLineUpEntries() as $entry) {
+						array_push($entries, array(
+							'id' => $entry->getId(),
+							'performer' => $entry->getPerformer(),
+							'startTime' => $entry->getStartTime(),
+							'endTime' => $entry->getEndTime()
+						));
+					}
+
+					if (count($entries) == 0) {
+						array_push($entries, array(
+							'id' => -1,
+							'performer' => '',
+							'startTime' => new \DateTime(),
+							'endTime' => new \DateTime()
 						));
 					}
 					break;

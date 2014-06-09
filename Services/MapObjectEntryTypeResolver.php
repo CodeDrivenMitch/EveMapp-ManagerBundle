@@ -22,6 +22,8 @@ class MapObjectEntryTypeResolver {
 			case "MarketStall":
 				return 'prices';
 				break;
+			case "Stage":
+				return 'times';
 			default:
 				return 'none';
 				break;

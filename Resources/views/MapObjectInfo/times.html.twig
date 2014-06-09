@@ -1,0 +1,16 @@
+<div class="mapObjectDescription">Description: {{ info.desc }} </div>
+<h4>Prices</h4>
+<div class="mapObjectPrices">
+
+
+    {% for entry in info.entries %}
+        {% if entry.performer != "" %}
+            <div class="mapObjectPriceEntry">
+                {{ entry.performer|capitalize }}: {{ entry.startTime.date|date('d-m H:i') }} - {{ entry.endTime.date|date('d-m H:i') }}
+            </div>
+        {% endif %}
+    {% endfor %}
+
+    <div id="editMapObjectInfo">Edit the information</div>
+
+</div>
