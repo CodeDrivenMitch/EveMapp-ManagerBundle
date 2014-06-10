@@ -4,7 +4,7 @@
 
 
     {% for entry in info.entries %}
-        {% if entry.performer != "" %}
+        {% if entry != "" and entry.performer != "" %}
             <div class="mapObjectPriceEntry">
                 {{ entry.performer|capitalize }}: {{ entry.startTime.date|date('d-m H:i') }} - {{ entry.endTime.date|date('d-m H:i') }}
             </div>

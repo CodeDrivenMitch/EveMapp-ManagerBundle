@@ -9,17 +9,17 @@
 namespace EveMapp\ManagerBundle\Services;
 
 
-use Symfony\Component\Validator\Constraints\DateTime;
-
 class ObjectToArrayService
 {
 
 	private $typeResolver;
 
-	public function __construct(MapObjectEntryTypeResolver $resolver) {
+	public function __construct(MapObjectEntryTypeResolver $resolver)
+	{
 		$this->typeResolver = $resolver;
 
 	}
+
 	public function mapObjectsToArray($objects)
 	{
 		$data = array();
@@ -50,7 +50,7 @@ class ObjectToArrayService
 					break;
 
 				case 'times':
-					foreach($object->getLineUpEntries() as $entry) {
+					foreach ($object->getLineUpEntries() as $entry) {
 						array_push($entries, array(
 							'id' => $entry->getId(),
 							'performer' => $entry->getPerformer(),
@@ -91,7 +91,8 @@ class ObjectToArrayService
 		return $data;
 	}
 
-	public function mapBoundsToArray($bounds) {
+	public function mapBoundsToArray($bounds)
+	{
 		return array(
 			'xmin' => $bounds->getLatLow(),
 			'xmax' => $bounds->getLatHigh(),

@@ -12,15 +12,15 @@
 function createTooltips() {
     var tooltipDiv = $('#infoTooltip');
 
-    $.each($('.tooltipAble'), function() {
+    $.each($('.tooltipAble'), function () {
 
-        $(this).mouseenter(function() {
+        $(this).mouseenter(function () {
             tooltipDiv.finish();
             tooltipDiv.html($(this).data('tooltip'));
             tooltipDiv.fadeIn();
         });
 
-        $(this).mouseleave(function() {
+        $(this).mouseleave(function () {
             tooltipDiv.finish();
             tooltipDiv.fadeOut();
 
@@ -32,18 +32,49 @@ function createTooltips() {
  * Sets or removes the loading overlay with a certain message
  * @param bool True sets overlay, False removes it
  * @param msg Message to show upon setting, only needed when bool == true
+ * @param type
  */
-function setOverlay(bool, msg) {
+function setOverlay(type, bool, msg) {
+    var messageDiv;
     var overlay = $("#overlay");
+    var content = $("#overlay_content");
+
+    switch (type) {
+        case 'loading':
+            messageDiv = $("#loading_message");
+            content.width('20%');
+            $('#loading_image').show();
+            break;
+        case 'content':
+            messageDiv = $("#content_message");
+            $('#loading_image').hide();
+            content.width('40%');
+            break;
+        case 'error':
+            messageDiv = $("#error_message");
+            content.width('100%');
+            $('#loading_image').hide();
+            break;
+    }
+
+
     switch (bool) {
         case true:
-            $('#message').html(msg);
+            messageDiv.html(msg);
             overlay.show();
+            messageDiv.show();
             break;
         case false:
             overlay.hide();
+            messageDiv.hide();
             break;
     }
+}
+
+function showErrorOverlay(msg) {
+    var overlay = $("#overlay_error");
+    $('#error_message').html(msg);
+    overlay.show();
 }
 
 /**
@@ -54,11 +85,11 @@ function setOverlay(bool, msg) {
  * @returns {*} New value of the size
  */
 function resizeByScale(oValue, newScale, oldScale) {
-    if(newScale == oldScale) return oValue;
+    if (newScale == oldScale) return oValue;
     var scale = 1;
-    if(newScale > oldScale) {
+    if (newScale > oldScale) {
         scale = Math.pow(2, newScale - oldScale);
-    } else if(oldScale > newScale) {
+    } else if (oldScale > newScale) {
         scale = Math.pow(0.5, oldScale - newScale);
     }
     return oValue * scale;

@@ -2,6 +2,7 @@ parameters:
   webservice_user_provider.class: EveMapp\ManagerBundle\Security\UserProvider
   map_object_type_resolver.class: EveMapp\ManagerBundle\Services\MapObjectEntryTypeResolver
   manager_o2a.class: EveMapp\ManagerBundle\Services\ObjectToArrayService
+  manager_a2o.class: EveMapp\ManagerBundle\Services\ArrayToObjectService
 
 services:
   webservice_user_provider:
@@ -10,4 +11,7 @@ services:
     class: "%map_object_type_resolver.class%"
   manager_o2a:
     class: "%manager_o2a.class%"
+    arguments: ["@map_object_type_resolver"]
+  manager_a2o:
+    class: "%manager_a2o.class%"
     arguments: ["@map_object_type_resolver"]

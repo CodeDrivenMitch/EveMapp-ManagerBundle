@@ -35,7 +35,7 @@ require([
 ], function (Map, Graphic, SimpleMarkerSymbol, PictureMarkerSymbol, GraphicsLayer, Point) {
 
     // Set overlay for loading first chance we get..
-    setOverlay(true, "Loading the map..");
+    setOverlay('loading', true, "Loading the map..");
     // Hide the sub toolbar for now
     $('#toolSubchoice').hide();
 
@@ -55,7 +55,7 @@ require([
         loadMapData();
         createTooltips();
         setEventHandlers();
-        setOverlay(false);
+        setOverlay('loading', false);
     });
 
     /**
@@ -64,9 +64,14 @@ require([
     function loadMapData() {
         layer = new GraphicsLayer();
         $.ajax({
-            url: "http://web.insidion.com/event/map/edit/request/bounds",
+            url: "/editor/load",
             dataType: 'json',
             async: false,
+            error: function (xhr) {
+
+                setOverlay('error', true, xhr.responseText);
+
+            },
             success: function (data) {
                 // Set map extent and apply it
                 console.log(data);
@@ -345,22 +350,7 @@ require([
         });
     }
 
-    function getObjectInformation() {
-        $.ajax({
-            type: "POST",
-            url: "http://web.insidion.com/event/map/edit/request/object_info/show",
-            data: {
-                object_type: selectedMarker.eveMappObjectType,
-                object_info: selectedMarker.eveMappObjectInfo
-            }
-        }).done(function (data) {
-            $('#accordion_information').html(data);
-            $('#editMapObjectInfo').click(function () {
-                openMapObjectEditor();
-            });
 
-        })
-    }
 
     /**
      * Called when an image is clicked an we need to set that image on the symbol.
@@ -389,7 +379,7 @@ require([
 
         };
         $.each(allGraphics, function (index, value) {
-            setOverlay(true, "Saving map..");
+            setOverlay('loading', true, "Saving map..");
             var latLongPoint = esri.geometry.webMercatorToGeographic(value.geometry);
 
             data.objects[data.objects.length] = {
@@ -408,111 +398,18 @@ require([
         $.post("http://web.insidion.com/event/map/edit/request/save", {saveData: JSON.stringify(data)})
             .done(function (data) {
                 if (data != 'true') {
-                    setOverlay(true, data);
+                    setOverlay('loading', true, data);
                 }
-                setOverlay(false);
+                setOverlay('loading', false);
 
 
             });
 
     }
 
-    /**
-     *
-     */
-
-    function openMapObjectEditor() {
-        $.ajax("http://web.insidion.com/event/map/edit/request/map_object_editor")
-            .done(function (data) {
-                setOverlay(true, data);
-                $('#loading_image').hide();
 
 
-                // onchange listener for description
-                var desc = $('#mapObjectEditorDescription');
-                desc.val(selectedMarker.eveMappObjectInfo.desc);
-                desc.change(function () {
-                    selectedMarker.eveMappObjectInfo.desc = $(this).val();
-                });
 
-
-                $.each(selectedMarker.eveMappObjectInfo.entries, addNewRowPriceEditor);
-
-
-                $('#overlayCloser').click(function () {
-                    $('#loading_image').show();
-                    getObjectInformation();
-                    setOverlay(false);
-                    saveRowPriceEditor();
-
-
-                });
-
-                $('#btAddEntry').click(function () {
-                    var newIndex = selectedMarker.eveMappObjectInfo.entries.length;
-                    selectedMarker.eveMappObjectInfo.entries[newIndex] = {
-                        id: -1,
-                        name: "",
-                        price: 0.01
-                    };
-
-                    addNewRowPriceEditor(newIndex, selectedMarker.eveMappObjectInfo.entries[newIndex]);
-                })
-
-            });
-    }
-
-    function addNewRowPriceEditor(index, value) {
-        if (value != null) {
-            var div = $('#mapObjectEditorPrices');
-            var inputString = "<input  class='entryInputName' type='text' data-entry='IndexValue' value='VALUE'/>" +
-                "<input type='number' class='entryInputPrice' data-entry='IndexValue' value='VALUE_PRICE'>";
-
-            var st = inputString.replace("IndexValue", index);
-            st = st.replace("IndexValue", index);
-            st = st.replace("VALUE", value.name);
-            st = st.replace("VALUE_PRICE", value.price);
-            div.append(st);
-
-            setChangeListenersEditor();
-        }
-
-    }
-
-    function saveRowPriceEditor() {
-        $.each(selectedMarker.eveMappObjectInfo.entries, function (index, value) {
-            if (value != null) {
-                if (value.name == "" && value.id != -1) {
-                    $.post("http://web.insidion.com/event/map/edit/map_object/entry/price/delete", {value: JSON.stringify(value)})
-                        .done(function (data) {
-                            if (data != 'false') {
-                                selectedMarker.eveMappObjectInfo.entries[index] = null;
-                            }
-                        });
-                } else if (value.id == -1) {
-                    value.object_id = selectedMarker.eveMappTableId;
-                    console.log(value);
-                    $.post("http://web.insidion.com/event/map/edit/map_object/entry/price/save", {value: JSON.stringify(value)})
-                        .done(function (data) {
-                            if (data != 'false') {
-                                value.index = data;
-                            }
-                        });
-                }
-
-            }
-        });
-    }
-
-    function setChangeListenersEditor() {
-        $('.entryInputName').change(function () {
-            selectedMarker.eveMappObjectInfo.entries[$(this).data('entry')].name = $(this).val();
-        });
-
-        $('.entryInputPrice').change(function () {
-            selectedMarker.eveMappObjectInfo.entries[$(this).data('entry')].price = $(this).val();
-        });
-    }
 
 
     /**

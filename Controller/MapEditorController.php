@@ -222,56 +222,15 @@ class MapEditorController extends Controller
 		));
 	}
 
-	public function mapObjectEditorAction()
-	{
-		return $this->render('ManagerBundle:MapObjectInfo:editPrices.html.twig');
-	}
-
-	public function  priceEntryDeleteAction(Request $request)
-	{
-		$data = json_decode($request->get('value'), true);
-		$entry = $this->getDoctrine()->getRepository("ManagerBundle:MapObjectPrice")->find($data['id']);
-
-		if ($entry) {
-			$em = $this->getDoctrine()->getManager();
-			$em->remove($entry);
-			$em->flush();
-		}
-
-		return new Response('true');
-	}
-
-	public function  priceEntrySaveAction(Request $request)
-	{
-		$data = json_decode($request->get('value'), true);
-		$em = $this->getDoctrine()->getManager();
-
-		if ($data['id'] == -1) {
-
-			$entry = new MapObjectPrice();
-			$entry->setName($data['name']);
-			$entry->setPrice($data['price']);
-
-			$object = $this->getDoctrine()->getRepository("ManagerBundle:MapObject")->find($data['object_id']);
-			if ($object) {
-				$entry->setMapObject($object);
-				$object->addPriceEntry($entry);
-
-				$em->persist($entry);
-				$em->persist($object);
-				$em->flush();
-
-				return new Response($entry->getId());
-			}
-		}
-
-		return new Response('false');
-	}
-
 	private function showObjectWithTimes($info)
 	{
 		return $this->render('ManagerBundle:MapObjectInfo:times.html.twig', array(
 			'info' => $info
 		));
+	}
+
+	public function mapObjectEditorAction()
+	{
+		return $this->render('ManagerBundle:MapObjectInfo:editPrices.html.twig');
 	}
 } 

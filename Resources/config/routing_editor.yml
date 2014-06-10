@@ -16,7 +16,7 @@ map_request_image_upload:
   path: /event/map/edit/request/image/upload
   defaults: { _controller: ManagerBundle:MapEditor:uploadImage }
   requirements:
-          _method:  POST
+    _method:  POST
 
 map_request_uploaded_images:
   path: /event/map/edit/request/image/get
@@ -34,10 +34,45 @@ map_request_mapobject_editor:
   path: /event/map/edit/request/map_object_editor
   defaults: { _controller: ManagerBundle:MapEditor:mapObjectEditor }
 
-map_request_mapobject_price_entry_save:
-  path: /event/map/edit/map_object/entry/price/save
-  defaults: { _controller: ManagerBundle:MapEditor:priceEntrySave }
+# New Entries!
 
-map_request_mapobject_price_entry_delete:
-  path: /event/map/edit/map_object/entry/price/delete
-  defaults: { _controller: ManagerBundle:MapEditor:priceEntryDelete }
+##################################################
+#             Map Object Routes                  #
+##################################################
+
+map_object_save:
+  path: /editor/object/save
+  defaults: { _controller: ManagerBundle:MapEditorAction:save }
+  requirements:
+      _method:  POST
+
+map_object_delete:
+  path: /editor/object/delete
+  defaults: { _controller: ManagerBundle:MapEditorAction:delete }
+  requirements:
+      _method:  POST
+
+
+##################################################
+#         Map Object Entry Routes                #
+##################################################
+
+map_entry_save:
+  path: /editor/entry/save/{type}
+  defaults: { _controller: ManagerBundle:MapEditorAction:saveEntry }
+  requirements:
+    _method:  POST
+
+map_entry_delete:
+  path: /editor/entry/delete/{type}
+  defaults: { _controller: ManagerBundle:MapEditorAction:deleteEntry }
+  requirements:
+    _method:  POST
+
+##################################################
+#             Map Loading Routes                 #
+##################################################
+
+map_load:
+  path: /editor/load
+  defaults: { _controller: ManagerBundle:MapEditorAction:load }
