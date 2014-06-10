@@ -363,56 +363,6 @@ require([
     }
 
     /**
-     * SAVE BUTTON HANDLERS
-     */
-
-    /**
-     * Fired when the save button is clicked.
-     * Gathers all data of the map and sends it in an Ajax request to the server.
-     * @param event
-     */
-    function saveButtonClick(event) {
-        var allGraphics = layer.graphics;
-        var data = {
-            deleted: deletedIds,
-            objects: []
-
-        };
-        $.each(allGraphics, function (index, value) {
-            setOverlay('loading', true, "Saving map..");
-            var latLongPoint = esri.geometry.webMercatorToGeographic(value.geometry);
-
-            data.objects[data.objects.length] = {
-                object_id: value.eveMappObjectId,
-                object_type: value.eveMappObjectType,
-                object_info: value.eveMappObjectInfo,
-                height: resizeByScale(value.symbol.height, 19, map.getZoom()),
-                width: resizeByScale(value.symbol.width, 19, map.getZoom()),
-                angle: value.symbol.angle,
-                image_url: value.symbol.url,
-                lat: latLongPoint.x,
-                lng: latLongPoint.y
-            };
-        });
-
-        $.post("http://web.insidion.com/event/map/edit/request/save", {saveData: JSON.stringify(data)})
-            .done(function (data) {
-                if (data != 'true') {
-                    setOverlay('loading', true, data);
-                }
-                setOverlay('loading', false);
-
-
-            });
-
-    }
-
-
-
-
-
-
-    /**
      * CLICK HANDLER SPECIFICATION
      * All events should just specify a further handler, no logic executed.
      */
@@ -432,10 +382,6 @@ require([
 
         $('.toolButton').click(function (event) {
             toolButtonClickHandler(event);
-        });
-
-        $('#saveButton').click(function (event) {
-            saveButtonClick(event);
         });
 
         /**
