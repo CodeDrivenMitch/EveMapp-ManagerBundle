@@ -42,13 +42,13 @@ map_request_mapobject_editor:
 
 map_object_save:
   path: /editor/object/save
-  defaults: { _controller: ManagerBundle:MapEditorAction:save }
+  defaults: { _controller: ManagerBundle:MapEditorAction:saveObject }
   requirements:
       _method:  POST
 
 map_object_delete:
   path: /editor/object/delete
-  defaults: { _controller: ManagerBundle:MapEditorAction:delete }
+  defaults: { _controller: ManagerBundle:MapEditorAction:deleteObject }
   requirements:
       _method:  POST
 

@@ -90,7 +90,7 @@ class MapObject
 	/**
 	 * @var string
 	 *
-	 * @ORM\Column(name="desc", type="string", length=255)
+	 * @ORM\Column(name="description", type="string", length=255)
 	 */
 	private $description;
 

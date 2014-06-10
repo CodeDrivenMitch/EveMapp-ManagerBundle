@@ -139,6 +139,10 @@ require([
             slide: function (event, ui) {
                 selectedMarker.symbol.setHeight(ui.value);
                 layer.redraw();
+            },
+            change: function() {
+                // User stopped sliding, save the object
+                saveObject(selectedMarker);
             }
         });
         $("#slider_width").slider({
@@ -148,6 +152,10 @@ require([
             slide: function (event, ui) {
                 selectedMarker.symbol.setWidth(ui.value);
                 layer.redraw();
+            },
+            change: function() {
+                // User stopped sliding, save the object
+                saveObject(selectedMarker);
             }
         });
         $("#slider_angle").slider({
@@ -157,6 +165,10 @@ require([
             slide: function (event, ui) {
                 selectedMarker.symbol.setAngle(ui.value);
                 layer.redraw();
+            },
+            change: function() {
+                // User stopped sliding, save the object
+                saveObject(selectedMarker);
             }
         });
         $('#imageUploadForm').ajaxForm(function () {
@@ -188,6 +200,7 @@ require([
         if (selectedMarker == null) {
             selectedMarker = event.graphic;
         } else {
+            saveObject(selectedMarker);
             selectedMarker = null;
         }
     }
@@ -201,15 +214,7 @@ require([
      */
 
     function deleteToolLayerMouseDown(event) {
-        deletedIds[deletedIds.length] = event.graphic.eveMappObjectId;
-        layer.remove(event.graphic);
-        lastDeletedMarker = event.graphic;
-        $("#toolSubchoice").show().html("<div id='undoButton' class='subToolButton'>Undo</div>");
-        $("#undoButton").click(function () {
-            layer.add(lastDeletedMarker);
-            deletedIds[$.inArray(lastDeletedMarker.eveMappObjectId, deletedIds)] = null;
-            $("#toolSubchoice").hide().html("");
-        });
+        deleteObject(event.graphic);
     }
 
     /**
@@ -230,19 +235,15 @@ require([
         // set values
         graphic.eveMappObjectId = getAvailableId();
         graphic.eveMappObjectType = selectedSubTool.data('objectType');
+        graphic.eveMappTableId = -1;
         graphic.eveMappObjectInfo = {
             desc: "",
-            entries: [
-                {
-                    id: -1,
-                    name: "",
-                    price: 0
-                }
-            ]
+            entries: ""
         };
 
         symbol.setAngle(0);
-        console.log(graphic);
+        saveObject(graphic);
+
 
         // add to map
         layer.add(graphic);
@@ -357,9 +358,12 @@ require([
      * @param element Image element which is clicked on.
      */
     function infoToolSetImage(element) {
-
+        // Set the url
         selectedMarker.symbol.url = element.data('url');
         layer.redraw();
+
+        // Update the object server side
+        saveObject(selectedMarker);
     }
 
     /**

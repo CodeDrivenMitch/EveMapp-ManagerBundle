@@ -9,9 +9,11 @@
 namespace EveMapp\ManagerBundle\Controller;
 
 
+use EveMapp\ManagerBundle\Entity\MapObject;
 use EveMapp\ManagerBundle\Entity\MapObjectLineUpEntry;
 use EveMapp\ManagerBundle\Entity\MapObjectPrice;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -48,11 +50,30 @@ class MapEditorActionController extends Controller
 	/**
 	 * Saves or updates an object to the database, and returns the new or already existing ID.
 	 * @param Request $request Request parameters and session
+	 * @return \Symfony\Component\HttpFoundation\Response
 	 * @throws \Exception
 	 */
 	public function saveObjectAction(Request $request)
 	{
-		throw new \Exception('Feature not implemented yet!');
+		$data = $request->get('object', null);
+		$em = $this->getDoctrine()->getManager();
+
+		$mapObject = new MapObject();
+
+		if($data['table_id'] != -1) {
+			$mapObject = $em->getRepository("ManagerBundle:MapObject")->find($data['table_id']);
+
+			if(!$mapObject) {
+				throw new \Exception("Object does not exists, should not have an ID!");
+			}
+		}
+
+		$mapObject = $this->get('manager_a2o')->arrayToMapObject($data, $mapObject);
+		$mapObject->setEventId(intval($request->getSession()->get("edit_map_event")));
+		$em->persist($mapObject);
+		$em->flush();
+
+		return new Response('true');
 	}
 
 	/**
@@ -89,12 +110,13 @@ class MapEditorActionController extends Controller
 	/**
 	 * Reads the needed data from the request and decodes the JSON
 	 * @param Request $request
-	 * @return mixed
+	 * @param string $key
 	 * @throws \Exception
+	 * @return mixed
 	 */
-	private function getObjectDataFromRequest(Request $request)
+	private function getObjectDataFromRequest(Request $request, $key = 'entry')
 	{
-		$data = $request->get('entry', null);
+		$data = $request->get($key, null);
 
 		if ($data == null) {
 			throw new \Exception("Entry value should not be null!");

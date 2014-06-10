@@ -9,18 +9,22 @@
 namespace EveMapp\ManagerBundle\Services;
 
 
+use EveMapp\ManagerBundle\Entity\MapObject;
 use EveMapp\ManagerBundle\Entity\MapObjectLineUpEntry;
 
-class ArrayToObjectService {
+class ArrayToObjectService
+{
 	private $typeResolver;
 
-	public function __construct(MapObjectEntryTypeResolver $resolver) {
+	public function __construct(MapObjectEntryTypeResolver $resolver)
+	{
 		$this->typeResolver = $resolver;
 	}
 
-	public function arrayToPriceEntry($data, $object=null) {
+	public function arrayToPriceEntry($data, $object = null)
+	{
 		$entry = new MapObjectLineUpEntry();
-		if($object != null) {
+		if ($object != null) {
 			$entry = $object;
 		}
 
@@ -29,6 +33,21 @@ class ArrayToObjectService {
 		$entry->setEndTime(new \DateTime($data['endTime']['date']));
 
 		return $entry;
+
+	}
+
+	public function arrayToMapObject($object, MapObject $mapObject)
+	{
+		return $mapObject
+			->setObjectId($object['object_id'])
+			->setAngle($object['angle'])
+			->setHeight($object['height'])
+			->setWidth($object['width'])
+			->setLat($object['lat'])
+			->setLng($object['lng'])
+			->setType($object['object_type'])
+			->setUrl($object['image_url'])
+			->setDescription($object['desc']);
 
 	}
 } 

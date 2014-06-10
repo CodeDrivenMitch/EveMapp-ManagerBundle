@@ -118,6 +118,10 @@ function setChangeListenersTimeEditor() {
 }
 
 function saveRowPriceEditor() {
+    // Save the object (description)
+    saveObject(selectedMarker);
+
+    // And its entries
     $.each(selectedMarker.eveMappObjectInfo.entries, function (index, value) {
         if (value != null) {
             if (value.name == "" && value.id != -1) {
@@ -147,6 +151,10 @@ function saveRowPriceEditor() {
 }
 
 function saveRowLineupEdtitor() {
+    // Save the object (description)
+    saveObject(selectedMarker);
+
+    // And its entries
     $.each(selectedMarker.eveMappObjectInfo.entries, function (index, value) {
         if (value != null) {
             if (value.performer == "" && value.id != -1) {
