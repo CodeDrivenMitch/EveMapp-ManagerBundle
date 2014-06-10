@@ -184,12 +184,7 @@ function saveRowLineupEdtitor() {
 
 function getObjectInformation() {
     $.ajax({
-        type: "POST",
-        url: "/editor/object_info/show/" + selectedMarker.eveMappTableId,
-        data: {
-            object_type: selectedMarker.eveMappObjectType,
-            object_info: selectedMarker.eveMappObjectInfo
-        }
+        url: "/editor/object_info/show/" + selectedMarker.eveMappTableId
     }).done(function (data) {
         $('#accordion_information').html(data);
         $('#editMapObjectInfo').click(function () {

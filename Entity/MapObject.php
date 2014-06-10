@@ -98,6 +98,7 @@ class MapObject
 	 * Bidirectional - One-To-Many (INVERSE SIDE)
 	 *
 	 * @ORM\OneToMany(targetEntity="MapObjectPrice", mappedBy="mapObject", cascade={"persist"})
+	 * @ORM\OrderBy({"price" = "ASC"})
 	 */
 	private $priceEntries;
 
@@ -105,6 +106,7 @@ class MapObject
 	 * Bidirectional - One-To-Many (INVERSE SIDE)
 	 *
 	 * @ORM\OneToMany(targetEntity="MapObjectLineUpEntry", mappedBy="mapObject", cascade={"persist"})
+	 * @ORM\OrderBy({"startTime" = "ASC"})
 	 */
 	private $lineUpEntries;
 

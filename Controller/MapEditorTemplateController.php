@@ -10,6 +10,7 @@ namespace EveMapp\ManagerBundle\Controller;
 
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Response;
 
 class MapEditorTemplateController extends Controller
 {
@@ -53,6 +54,10 @@ class MapEditorTemplateController extends Controller
 				$template = 'ManagerBundle:MapObjectInfo:objectInfoTime.html.twig';
 				$data = $object->getLineUpEntries();
 				break;
+		}
+
+		if($template == "") {
+			return new Response("Not implemented");
 		}
 
 		return $this->render($template, array(
