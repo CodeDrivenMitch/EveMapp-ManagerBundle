@@ -23,9 +23,9 @@ class MapEditorTemplateController extends Controller
 	public function entryRowTemplateAction($type)
 	{
 		switch ($type) {
-			case 'price':
+			case 'Prices':
 				return $this->render('ManagerBundle:MapObjectInfo:templatePrice.html.twig');
-			case 'time':
+			case 'Timetable':
 				return $this->render('ManagerBundle:MapObjectInfo:templateTime.html.twig');
 		}
 
@@ -45,13 +45,13 @@ class MapEditorTemplateController extends Controller
 
 
 		switch($this->get('map_object_type_resolver')->getEntryType($object->getType())) {
-			case 'prices':
+			case 'Prices':
 				$template = 'ManagerBundle:MapObjectInfo:objectInfoPrice.html.twig';
 				$data = $object->getPriceEntries();
 				break;
-			case 'times':
-				$template = 'ManagerBundle:MapObjectInfo:objectInfoPrice.html.twig';
-				$data = $object->getPriceEntries();
+			case 'Timetable':
+				$template = 'ManagerBundle:MapObjectInfo:objectInfoTime.html.twig';
+				$data = $object->getLineUpEntries();
 				break;
 		}
 

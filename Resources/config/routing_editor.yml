@@ -5,7 +5,7 @@ map_sub_tool:
   defaults: { _controller: ManagerBundle:MapEditor:getSubtool }
 
 map_object_editor:
-  path: /editor/object_editor
+  path: /editor/object_editor/{type}
   defaults: { _controller: ManagerBundle:MapEditor:mapObjectEditor }
 
 # New Entries!

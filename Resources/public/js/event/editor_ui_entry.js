@@ -1,10 +1,10 @@
 function getEditorRowType() {
     if ($.inArray(selectedMarker.eveMappObjectType, ["MarketStall", "Toilet", "FoodStand"]) != -1) {
-        return 'prices';
+        return 'Prices';
     }
 
     if ($.inArray(selectedMarker.eveMappObjectType, ["Stage"]) != -1) {
-        return 'times';
+        return 'Timetable';
     }
 
     return 'none';
@@ -105,14 +105,14 @@ function setChangeListenersTimeEditor() {
         selectedMarker.eveMappObjectInfo.entries[$(this).data('entry')].startTime.date = $(this).val();
     });
     $('.entryInputStartTime').datetimepicker({
-        format: 'Y-m-d H:i:s'
+        format: 'Y-m-d H:i'
     });
 
     $('.entryInputEndTime').change(function () {
         selectedMarker.eveMappObjectInfo.entries[$(this).data('entry')].endTime.date = $(this).val();
     });
     $('.entryInputEndTime').datetimepicker({
-        format: 'Y-m-d H:i:s'
+        format: 'Y-m-d H:i'
     });
 
 }
@@ -206,7 +206,7 @@ function getObjectInformation() {
  */
 
 function openMapObjectEditor() {
-    $.ajax("http://web.insidion.com/event/map/edit/request/map_object_editor")
+    $.ajax("/editor/object_editor/" + getEditorRowType())
         .done(function (data) {
             setOverlay('content', true, data);
             $('#loading_image').hide();
@@ -221,10 +221,10 @@ function openMapObjectEditor() {
 
             // Depending on info type create the editor and its listeners
             switch (getEditorRowType()) {
-                case 'prices':
+                case 'Prices':
                     createPriceEditor();
                     break;
-                case 'times':
+                case 'Timetable':
                     createLineupEditor();
                     break;
             }

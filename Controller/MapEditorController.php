@@ -42,8 +42,10 @@ class MapEditorController extends Controller
 		return new Response("false");
 	}
 
-	public function mapObjectEditorAction()
+	public function mapObjectEditorAction($type)
 	{
-		return $this->render('ManagerBundle:MapObjectInfo:editPrices.html.twig');
+		return $this->render("ManagerBundle:MapObjectInfo:editorTemplate.html.twig", array(
+			'type' => $type
+		));
 	}
 } 

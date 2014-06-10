@@ -30,7 +30,7 @@ class ObjectToArrayService
 
 			// Determine which property this mapObject should have and act accordingly
 			switch ($this->typeResolver->getEntryType($object->getType())) {
-				case 'prices':
+				case 'Prices':
 					foreach ($object->getPriceEntries() as $entry) {
 						array_push($entries, array(
 							'id' => $entry->getId(),
@@ -49,7 +49,7 @@ class ObjectToArrayService
 					}
 					break;
 
-				case 'times':
+				case 'Timetable':
 					foreach ($object->getLineUpEntries() as $entry) {
 						array_push($entries, array(
 							'id' => $entry->getId(),

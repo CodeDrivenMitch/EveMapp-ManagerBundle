@@ -9,24 +9,24 @@
 namespace EveMapp\ManagerBundle\Services;
 
 
-class MapObjectEntryTypeResolver {
+class MapObjectEntryTypeResolver
+{
 	public function getEntryType($objectType)
 	{
-		switch ($objectType) {
-			case "FoodStand":
-				return 'prices';
-				break;
-			case "Toilet":
-				return 'prices';
-				break;
-			case "MarketStall":
-				return 'prices';
-				break;
-			case "Stage":
-				return 'times';
-			default:
-				return 'none';
-				break;
+		if (in_array($objectType, array(
+			"FoodStand", "Toilet", "MarketStall"
+		))
+		) {
+			return 'Prices';
 		}
+
+		if (in_array($objectType, array(
+			"Stage"
+		))
+		) {
+			return 'Timetable';
+		}
+
+		return 'none';
 	}
 } 
