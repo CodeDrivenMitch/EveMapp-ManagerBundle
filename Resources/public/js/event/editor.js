@@ -232,7 +232,7 @@ require([
         graphic.eveMappTableId = -1;
         graphic.eveMappObjectInfo = {
             desc: "",
-            entries: ""
+            entries: []
         };
 
         symbol.setAngle(0);

@@ -18,7 +18,7 @@ function saveObject(object) {
             lng: latLongPoint.y
         }
     }).done(function (data) {
-        object.eveMappObjectId = data;
+        object.eveMappTableId = data;
     }).error(function (xhr) {
         setOverlay('error', true, xhr.responseText);
     });
@@ -26,7 +26,7 @@ function saveObject(object) {
 
 function deleteObject(graphic) {
     $.post("/editor/object/delete", { id: graphic.eveMappTableId })
-        .beforeSend(function() {
+        .done(function() {
             layer.remove(graphic);
         })
         .error(function(xhr) {

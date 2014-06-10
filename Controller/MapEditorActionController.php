@@ -73,17 +73,28 @@ class MapEditorActionController extends Controller
 		$em->persist($mapObject);
 		$em->flush();
 
-		return new Response('true');
+		return new Response($mapObject->getId());
 	}
 
 	/**
 	 * Deletes a MapObject from the database.
 	 * @param Request $request Request parameters and session
+	 * @return \Symfony\Component\HttpFoundation\Response
 	 * @throws \Exception
 	 */
 	public function deleteObjectAction(Request $request)
 	{
-		throw new \Exception('Feature not implemented yet!');
+		$em = $this->getDoctrine()->getManager();
+		$object = $em->getRepository("ManagerBundle:MapObject")->find($request->get('id'));
+
+		if(!$object) {
+			throw new \Exception('Object not found!');
+		}
+
+		$em->remove($object);
+		$em->flush();
+
+		return new Response('true');
 	}
 
 	/**

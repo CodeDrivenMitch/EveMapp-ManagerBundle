@@ -34,7 +34,7 @@ class MapEditorController extends Controller
 
 			case "deleteToolButton":
 				return $this->render('ManagerBundle:SubTools:deleteTool.html.twig');
-			
+
 			case "dragToolButton":
 				return $this->render('ManagerBundle:SubTools:dragTool.html.twig');
 		}
