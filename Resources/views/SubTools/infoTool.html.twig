@@ -1,4 +1,9 @@
-<div id="accordion">
+<div class="toolExplanation">
+    This is the info tool. When you have this tool selected you can click an object on the map and edit
+    an abundance of attributes and information about it.
+</div>
+
+<div id="accordion" class="subTool" style="display: none;">
     <h3>Attributes</h3>
 
     <div id="accordion_attributes">
@@ -23,7 +28,7 @@
     <h3>Upload Image</h3>
 
     <div id="accordion_image_uploader">
-        <form id="imageUploadForm" action="{{ path('map_request_image_upload') }}" method="POST" {{ form_enctype(form) }}>
+        <form id="imageUploadForm" action="{{ path('map_image_upload') }}" method="POST" {{ form_enctype(form) }}>
             {{ form_widget(form.file) }}
             {{ form_widget(form.type) }}
             {{ form_rest(form) }}

@@ -1,32 +1,32 @@
 # Old entries, need converting to new url format!
 
-map_request_sub_tool:
-  path: /event/map/edit/request/subtool/{type}
+map_sub_tool:
+  path: /editor/subtool/{type}
   defaults: { _controller: ManagerBundle:MapEditor:getSubtool }
 
-map_request_image_upload:
-  path: /event/map/edit/request/image/upload
-  defaults: { _controller: ManagerBundle:MapEditor:uploadImage }
-  requirements:
-    _method:  POST
-
-map_request_uploaded_images:
-  path: /event/map/edit/request/image/get
-  defaults: { _controller: ManagerBundle:MapEditor:getUploadedImages }
-
-map_request_delete_image:
-  path: /event/map/edit/request/image/delete/{id}
-  defaults: { _controller: ManagerBundle:MapEditor:deleteImage }
-
-map_request_mapobject_info_show:
-  path: /event/map/edit/request/object_info/show
-  defaults: { _controller: ManagerBundle:MapEditor:showObjectInfo }
-
-map_request_mapobject_editor:
-  path: /event/map/edit/request/map_object_editor
+map_object_editor:
+  path: /editor/object_editor
   defaults: { _controller: ManagerBundle:MapEditor:mapObjectEditor }
 
 # New Entries!
+
+##################################################
+#               Image  Routes                    #
+##################################################
+
+map_image_uploads:
+  path: /editor/image/get
+  defaults: { _controller: ManagerBundle:MapEditorImage:getUploads }
+
+map_image_upload:
+  path: /editor/image/upload
+  defaults: { _controller: ManagerBundle:MapEditorImage:upload }
+  requirements:
+    _method:  POST
+
+map_image_delete:
+  path: /editor/image/delete/{id}
+  defaults: { _controller: ManagerBundle:MapEditorImage:delete }
 
 ##################################################
 #             Map Object Routes                  #
@@ -60,6 +60,10 @@ map_entry_delete:
   defaults: { _controller: ManagerBundle:MapEditorAction:deleteEntry }
   requirements:
     _method:  POST
+
+object_info_show:
+  path: /editor/object_info/show/{id}
+  defaults: { _controller: ManagerBundle:MapEditorTemplate:objectInfo }
 
 ##################################################
 #             Map Loading Routes                 #

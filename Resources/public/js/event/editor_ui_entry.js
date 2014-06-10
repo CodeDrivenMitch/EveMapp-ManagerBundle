@@ -185,7 +185,7 @@ function saveRowLineupEdtitor() {
 function getObjectInformation() {
     $.ajax({
         type: "POST",
-        url: "http://web.insidion.com/event/map/edit/request/object_info/show",
+        url: "/editor/object_info/show/" + selectedMarker.eveMappTableId,
         data: {
             object_type: selectedMarker.eveMappObjectType,
             object_info: selectedMarker.eveMappObjectInfo

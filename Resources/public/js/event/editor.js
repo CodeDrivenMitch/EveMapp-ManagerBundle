@@ -15,11 +15,10 @@ var extent;
 var selectedTool;
 var selectedSubTool;
 var selectedMarker;
-var lastDeletedMarker;
 var takenIds = [];
-var deletedIds = [];
 var previousZoom;
 
+setOverlay('loading', true, "Loading the map..");
 /**
  * Code which needs Dojo/Esri Arcgis SDK
  */
@@ -33,12 +32,6 @@ require([
     "esri/geometry/Point",
     "dojo/domReady!"
 ], function (Map, Graphic, SimpleMarkerSymbol, PictureMarkerSymbol, GraphicsLayer, Point) {
-
-    // Set overlay for loading first chance we get..
-    setOverlay('loading', true, "Loading the map..");
-    // Hide the sub toolbar for now
-    $('#toolSubchoice').hide();
-
 
     // Create the map
     map = new Map("map", {
@@ -123,8 +116,7 @@ require([
         infoToolInitSliders();
         refreshImages();
         getObjectInformation();
-        $("#toolSubchoice").show();
-
+        $("#accordion").show();
     }
 
     function infoToolInitSliders() {
@@ -132,6 +124,10 @@ require([
             collapsible: true,
             heightStyle: "content"
         });
+
+
+
+        // Set new sliders
         $("#slider_height").slider({
             min: 1,
             max: 300,
@@ -140,8 +136,7 @@ require([
                 selectedMarker.symbol.setHeight(ui.value);
                 layer.redraw();
             },
-            change: function() {
-                // User stopped sliding, save the object
+            change: function () {
                 saveObject(selectedMarker);
             }
         });
@@ -153,7 +148,7 @@ require([
                 selectedMarker.symbol.setWidth(ui.value);
                 layer.redraw();
             },
-            change: function() {
+            change: function () {
                 // User stopped sliding, save the object
                 saveObject(selectedMarker);
             }
@@ -166,8 +161,7 @@ require([
                 selectedMarker.symbol.setAngle(ui.value);
                 layer.redraw();
             },
-            change: function() {
-                // User stopped sliding, save the object
+            change: function () {
                 saveObject(selectedMarker);
             }
         });
@@ -297,10 +291,9 @@ require([
         $("#" + selectedTool).toggleClass("activeToolButton");
         selectedTool = event.currentTarget.id;
         $("#" + selectedTool).toggleClass("activeToolButton");
-        $("#toolSubchoice").hide();
         // Retrieve subTools with an Ajax request
         $.ajax({
-            url: "http://web.insidion.com/event/map/edit/request/subtool/" + selectedTool
+            url: "/editor/subtool/" + selectedTool
         }).done(function (data) {
             if (data == "false") {
                 data = "";
@@ -311,13 +304,8 @@ require([
 
             });
 
-            if (selectedTool == "createToolButton") {
-                $("#toolSubchoice").show();
-            }
-
             // Set the tooltips again
             createTooltips();
-
         })
     }
 
@@ -326,7 +314,7 @@ require([
      */
     function refreshImages() {
         $.ajax({
-            url: "http://web.insidion.com/event/map/edit/request/image/get"
+            url: "/editor/image/get"
         }).done(function (data) {
             $('#accordion_image_chooser').html(data);
             $('#mapObjectImage_type').val(selectedMarker.eveMappObjectType);
@@ -350,7 +338,6 @@ require([
             }
         });
     }
-
 
 
     /**

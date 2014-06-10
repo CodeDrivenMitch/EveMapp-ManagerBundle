@@ -1,0 +1,15 @@
+<div class="mapObjectDescription">Description: {{ info.description }} </div>
+<h4>Prices</h4>
+<div class="mapObjectPrices">
+
+
+    {% for entry in entries %}
+        <div class="mapObjectPriceEntry">
+            {{ entry.performer|capitalize }}: {{ entry.startTime.date|date('d-m H:i') }}
+            - {{ entry.endTime.date|date('d-m H:i') }}
+        </div>
+    {% endfor %}
+
+    <div id="editMapObjectInfo">Edit the information</div>
+
+</div>

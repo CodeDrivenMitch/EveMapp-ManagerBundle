@@ -185,7 +185,7 @@ class EventController extends Controller
 
 		$request->getSession()->set("edit_map_event", $id);
 
-		return $this->render('ManagerBundle:Editor:edit-map-event.html.twig', array('event' => $event));
+		return $this->render('ManagerBundle:Editor:editor.html.twig', array('event' => $event));
 	}
 
 	/**
