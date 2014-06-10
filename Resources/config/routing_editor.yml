@@ -1,16 +1,8 @@
-# Map Editor Routes
-
-map_request_bounds:
-  path: /event/map/edit/request/bounds
-  defaults: { _controller: ManagerBundle:MapEditor:getBounds }
+# Old entries, need converting to new url format!
 
 map_request_sub_tool:
   path: /event/map/edit/request/subtool/{type}
   defaults: { _controller: ManagerBundle:MapEditor:getSubtool }
-
-map_request_save:
-  path: /event/map/edit/request/save
-  defaults: { _controller: ManagerBundle:MapEditor:Save }
 
 map_request_image_upload:
   path: /event/map/edit/request/image/upload

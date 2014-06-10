@@ -21,24 +21,6 @@ use Symfony\Component\HttpFoundation\Response;
 class MapEditorController extends Controller
 {
 
-	public function getBoundsAction(Request $request)
-	{
-		$session = $request->getSession();
-
-		$eventId = $session->get("edit_map_event");
-		$event = $this->getDoctrine()->getRepository("ManagerBundle:Event")->find($eventId);
-		$objects = $this->getDoctrine()->getRepository("ManagerBundle:MapObject")->findByEventId($eventId);
-		$bounds = $event->getBounds();
-
-
-		$data = array(
-			'bounds' => $this->get('manager_o2a')->mapBoundsToArray($bounds),
-			'objects' => $this->get('manager_o2a')->mapObjectsToArray($objects)
-		);
-
-		return new JsonResponse($data);
-	}
-
 	public function getSubtoolAction($type)
 	{
 		switch ($type) {
@@ -69,91 +51,6 @@ class MapEditorController extends Controller
 
 	}
 
-	public function saveAction(Request $request)
-	{
-		$data = json_decode($request->request->get('saveData', "false"), true);
-		$repository = $this->getDoctrine()->getRepository("ManagerBundle:MapObject");
-		$repositoryPrices = $this->getDoctrine()->getRepository("ManagerBundle:MapObjectPrice");
-		$em = $this->getDoctrine()->getManager();
-
-		// Execute deletes
-		foreach ($data['deleted'] as $del) {
-			$oldObject = $repository->findOneBy(array(
-				"eventId" => $request->getSession()->get("edit_map_event"),
-				"objectId" => $del
-			));
-			if ($oldObject) {
-				$em->remove($oldObject);
-
-			}
-		}
-
-		// update where needed
-		foreach ($data['objects'] as $object) {
-			$newObject = new MapObject();
-			$oldObject = $repository->findOneBy(array(
-				"eventId" => $request->getSession()->get("edit_map_event"),
-				"objectId" => $object['object_id']
-			));
-
-
-			if ($oldObject) {
-				$newObject = $oldObject;
-			}
-
-			foreach ($object['object_info']['entries'] as $entry) {
-				if ($entry != null) {
-
-					switch ($this->get('map_object_type_resolver')->getEntryType($object['object_type'])) {
-						case 'prices':
-
-							$priceEntry = $repositoryPrices->find($entry['id']);
-
-							if (!$priceEntry) {
-								$priceEntry = new MapObjectPrice();
-							}
-
-							if ($entry['name'] != "") {
-								$priceEntry->setName($entry['name']);
-								$priceEntry->setPrice($entry['price']);
-
-								$priceEntry->setMapObject($newObject);
-								$newObject->addPriceEntry($priceEntry);
-							} else {
-								if ($priceEntry) {
-									$newObject->removePriceEntry($priceEntry);
-									$em->remove($priceEntry);
-								}
-							}
-							break;
-					}
-				}
-
-			}
-
-			$newObject
-				->setEventId($request->getSession()->get("edit_map_event"))
-				->setObjectId($object['object_id'])
-				->setAngle($object['angle'])
-				->setHeight($object['height'])
-				->setWidth($object['width'])
-				->setLat($object['lat'])
-				->setLng($object['lng'])
-				->setType($object['object_type'])
-				->setUrl($object['image_url'])
-				->setDescription($object['object_info']['desc']);
-			$em->persist($newObject);
-
-			foreach ($newObject->getPriceEntries() as $priceEntry) {
-				$em->persist($priceEntry);
-			}
-
-		}
-
-		$em->flush();
-
-		return new Response("true");
-	}
 
 	public function uploadImageAction(Request $request)
 	{

@@ -14,13 +14,6 @@ use EveMapp\ManagerBundle\Entity\MapObjectLineUpEntry;
 
 class ArrayToObjectService
 {
-	private $typeResolver;
-
-	public function __construct(MapObjectEntryTypeResolver $resolver)
-	{
-		$this->typeResolver = $resolver;
-	}
-
 	public function arrayToPriceEntry($data, $object = null)
 	{
 		$entry = new MapObjectLineUpEntry();

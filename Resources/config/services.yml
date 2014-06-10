@@ -14,4 +14,3 @@ services:
     arguments: ["@map_object_type_resolver"]
   manager_a2o:
     class: "%manager_a2o.class%"
-    arguments: ["@map_object_type_resolver"]
