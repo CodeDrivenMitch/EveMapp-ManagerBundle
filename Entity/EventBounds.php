@@ -52,6 +52,13 @@ class EventBounds
     private $lngHigh;
 
 	/**
+	 * @var float
+	 *
+	 * @ORM\Column(name="resolution", type="float")
+	 */
+	private $resolution;
+
+	/**
      * Get id
      *
      * @return integer 
@@ -151,5 +158,28 @@ class EventBounds
     public function getLngHigh()
     {
         return $this->lngHigh;
+    }
+
+    /**
+     * Set resolution
+     *
+     * @param float $resolution
+     * @return EventBounds
+     */
+    public function setResolution($resolution)
+    {
+        $this->resolution = $resolution;
+
+        return $this;
+    }
+
+    /**
+     * Get resolution
+     *
+     * @return float 
+     */
+    public function getResolution()
+    {
+        return $this->resolution;
     }
 }

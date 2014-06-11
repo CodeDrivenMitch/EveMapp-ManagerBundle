@@ -56,6 +56,7 @@ require([
      */
     function loadMapData() {
         layer = new GraphicsLayer();
+
         $.ajax({
             url: "/editor/load",
             dataType: 'json',
@@ -71,6 +72,15 @@ require([
                 previousZoom = 19;
                 extent = new esri.geometry.Extent(data.bounds);
                 map.setExtent(extent);
+                var x = data.bounds.xmin + (data.bounds.xmax - data.bounds.xmin) /2;
+                var y = data.bounds.ymin + (data.bounds.ymax - data.bounds.ymin) /2;
+
+                var heatMapLayer = new GraphicsLayer();
+                var hSymbol = new PictureMarkerSymbol('http://web.insidion.com/bundles/manager/images/heatmap/2.png',
+                    650, 400);
+                var hGraphic = new Graphic(esri.geometry.geographicToWebMercator(new Point(x, y)), hSymbol);
+                heatMapLayer.add(hGraphic);
+                map.addLayer(heatMapLayer);
 
 
                 // Add graphics to the map

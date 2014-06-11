@@ -17,3 +17,8 @@ account_create:
     path:     /register/create
     defaults: { _controller: ManagerBundle:Account:create }
 
+# Heatmap routes
+
+heatmap:
+  path: /heatmap/get
+  defaults: { _controller: ManagerBundle:HeatMap:get }
