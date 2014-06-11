@@ -1,5 +1,3 @@
-# Old entries, need converting to new url format!
-
 map_sub_tool:
   path: /editor/subtool/{type}
   defaults: { _controller: ManagerBundle:MapEditor:getSubtool }
@@ -7,8 +5,6 @@ map_sub_tool:
 map_object_editor:
   path: /editor/object_editor/{type}/{id}
   defaults: { _controller: ManagerBundle:MapEditor:mapObjectEditor }
-
-# New Entries!
 
 ##################################################
 #               Image  Routes                    #

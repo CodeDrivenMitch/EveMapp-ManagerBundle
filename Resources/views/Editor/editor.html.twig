@@ -1,8 +1,11 @@
 <html>
 <head>
     <title>Editing {{ event.name }} - EveMapp WebManager</title>
-    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/manager/css/event_edit.css') }}"/>
+    {% stylesheets 'bundles/manager/css/*' filter='cssrewrite' %}
     <link rel="stylesheet" type="text/css" href="{{ asset('bundles/manager/css/main.css') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/manager/css/event_edit.css.less') }}"/>
+    {% endstylesheets %}
+
     <link rel="stylesheet" href="{{ asset('bundles/manager/css/jquery.datetimepicker.css') }}">
     <script src="http://js.arcgis.com/3.9/"></script>
     <script src="{{ asset('bundles/manager/js/jquery-1.10.2.js') }}"></script>
