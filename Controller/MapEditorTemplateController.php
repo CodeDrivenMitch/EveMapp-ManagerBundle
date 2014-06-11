@@ -10,6 +10,7 @@ namespace EveMapp\ManagerBundle\Controller;
 
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class MapEditorTemplateController extends Controller
@@ -17,17 +18,25 @@ class MapEditorTemplateController extends Controller
 
 	/**
 	 * Returns template based on entry type for the new rows.
+	 * @param Request $request
 	 * @param $type string Type of entry
 	 * @throws \Exception
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	public function entryRowTemplateAction($type)
+	public function entryRowAction(Request $request, $type)
 	{
+		$index = $request->get("index");
+
 		switch ($type) {
-			case 'Prices':
-				return $this->render('ManagerBundle:MapObjectInfo:templatePrice.html.twig');
-			case 'Timetable':
-				return $this->render('ManagerBundle:MapObjectInfo:templateTime.html.twig');
+			case 'price':
+				return $this->render('ManagerBundle:MapObjectInfo:templatePrice.html.twig', array(
+					'i' => $index
+				));
+			case 'time':
+				return $this->render('ManagerBundle:MapObjectInfo:templateTime.html.twig', array(
+					'i' => $index,
+					'date' => new \DateTime()
+				));
 		}
 
 		throw new \Exception("Type not implemented!");
@@ -37,7 +46,7 @@ class MapEditorTemplateController extends Controller
 	{
 		$object = $this->getDoctrine()->getRepository("ManagerBundle:MapObject")->find($id);
 
-		if(!$object) {
+		if (!$object) {
 			throw new \Exception("Object does not exist!");
 		}
 
@@ -45,7 +54,7 @@ class MapEditorTemplateController extends Controller
 		$data = null;
 
 
-		switch($this->get('map_object_type_resolver')->getEntryType($object->getType())) {
+		switch ($this->get('map_object_type_resolver')->getEntryType($object->getType())) {
 			case 'Prices':
 				$template = 'ManagerBundle:MapObjectInfo:objectInfoPrice.html.twig';
 				$data = $object->getPriceEntries();
@@ -56,7 +65,7 @@ class MapEditorTemplateController extends Controller
 				break;
 		}
 
-		if($template == "") {
+		if ($template == "") {
 			return new Response("Not implemented");
 		}
 

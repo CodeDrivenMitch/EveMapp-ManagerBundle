@@ -11,37 +11,27 @@ function getEditorRowType() {
 }
 
 function createPriceEditor() {
-    $.each(selectedMarker.eveMappObjectInfo.entries, addNewRowPriceEditor);
     $('#overlayCloser').click(function () {
-        $('#loading_image').show();
-        getObjectInformation();
-        setOverlay('content', false);
         saveRowPriceEditor();
     });
     $('#btAddEntry').click(function () {
-        var newIndex = selectedMarker.eveMappObjectInfo.entries.length;
-        selectedMarker.eveMappObjectInfo.entries[newIndex] = {
+        addNewRowPriceEditor(selectedMarker.eveMappObjectInfo.entries.length);
+        selectedMarker.eveMappObjectInfo.entries[selectedMarker.eveMappObjectInfo.entries.length] = {
             id: -1,
             name: "",
-            price: 0.01
-        };
-
-        addNewRowPriceEditor(newIndex, selectedMarker.eveMappObjectInfo.entries[newIndex]);
+            price: 0
+        }
     });
 
 }
 
 function createLineupEditor() {
-    $.each(selectedMarker.eveMappObjectInfo.entries, addNewRowLineUpEditor);
     $('#overlayCloser').click(function () {
         saveRowLineupEdtitor();
-        getObjectInformation();
-        setOverlay('content', false);
     });
     $('#btAddEntry').click(function () {
-        var newIndex = selectedMarker.eveMappObjectInfo.entries.length;
-
-        selectedMarker.eveMappObjectInfo.entries[newIndex] = {
+        addNewRowLineUpEditor(selectedMarker.eveMappObjectInfo.entries.length);
+        selectedMarker.eveMappObjectInfo.entries[selectedMarker.eveMappObjectInfo.entries.length] = {
             id: -1,
             performer: "",
             startTime: {
@@ -50,36 +40,27 @@ function createLineupEditor() {
             endTime: {
                 date: "End Time"
             }
-        };
-
-        addNewRowLineUpEditor(newIndex, selectedMarker.eveMappObjectInfo.entries[newIndex]);
+        }
     });
 }
 
-function addNewRowPriceEditor(index, value) {
-    if (value != null) {
-        var div = $('#mapObjectEditorPrices');
-        var inputString = "<input  class='entryInputName' type='text' data-entry='" + index + "' value='" + value.name + "'/>" +
-            "<input type='number' class='entryInputPrice' data-entry='" + index + "' value='" + value.price + "'>";
-        div.append(inputString);
-
+function addNewRowPriceEditor(index) {
+    $.post("/editor/template/entry/price", {
+        index: index
+    }, function (data) {
+        $('#mapObjectEditorPrices').append(data);
         setChangeListenersPriceEditor();
-    }
+    });
 }
 
-function addNewRowLineUpEditor(index, value) {
-    if (value != null) {
-        var div = $('#mapObjectEditorPrices');
-        // Ugly HTML in JS, might fix this later on
-        var inputString = "<input class='entryInputPerformer' type='text' data-entry='" + index + "' value='" + value.performer + "' />" +
-            "<input class='entryInputStartTime' type='text' data-entry='" + index + "' value='" + value.startTime.date + "' />" +
-            "<input class='entryInputEndTime' type='text' data-entry='" + index + "' value='" + value.endTime.date + "' />";
+function addNewRowLineUpEditor(index) {
 
-        div.append(inputString);
-
+    $.post("/editor/template/entry/time", {
+        index: index
+    }, function (data) {
+        $('#mapObjectEditorPrices').append(data);
         setChangeListenersTimeEditor();
-
-    }
+    });
 }
 
 function setChangeListenersPriceEditor() {
@@ -148,6 +129,9 @@ function saveRowPriceEditor() {
 
         }
     });
+
+    getObjectInformation();
+    setOverlay('content', false);
 }
 
 function saveRowLineupEdtitor() {
@@ -180,6 +164,9 @@ function saveRowLineupEdtitor() {
 
         }
     });
+
+    getObjectInformation();
+    setOverlay('content', false);
 }
 
 function getObjectInformation() {
@@ -201,7 +188,7 @@ function getObjectInformation() {
  */
 
 function openMapObjectEditor() {
-    $.ajax("/editor/object_editor/" + getEditorRowType())
+    $.ajax("/editor/object_editor/" + getEditorRowType() + "/" + selectedMarker.eveMappTableId)
         .done(function (data) {
             setOverlay('content', true, data);
             $('#loading_image').hide();

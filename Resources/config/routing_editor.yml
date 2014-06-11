@@ -5,7 +5,7 @@ map_sub_tool:
   defaults: { _controller: ManagerBundle:MapEditor:getSubtool }
 
 map_object_editor:
-  path: /editor/object_editor/{type}
+  path: /editor/object_editor/{type}/{id}
   defaults: { _controller: ManagerBundle:MapEditor:mapObjectEditor }
 
 # New Entries!
@@ -72,3 +72,11 @@ object_info_show:
 map_load:
   path: /editor/load
   defaults: { _controller: ManagerBundle:MapEditorAction:load }
+
+##################################################
+#            Template  Routes                    #
+##################################################
+
+map_template_row_price:
+  path: /editor/template/entry/{type}
+  defaults: { _controller: ManagerBundle:MapEditorTemplate:entryRow }

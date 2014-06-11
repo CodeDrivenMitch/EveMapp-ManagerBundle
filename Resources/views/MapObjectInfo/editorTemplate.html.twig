@@ -7,7 +7,26 @@
         <textarea id="mapObjectEditorDescription" placeholder="Your description here." rows="5" cols="40"></textarea>
     </div>
     <h3>{{ type }}</h3>
+
     <div id="mapObjectEditorPrices">
+
+        {% for entry in entries %}
+            {% if type == "Timetable" %}
+                <input class='entryInputPerformer' type='text' data-entry='{{ loop.index0 }}'
+                       value="{{ entry.performer }}"/>
+                <input class='entryInputStartTime' type='text' data-entry='{{ loop.index0 }}'
+                       value='{{ entry.startTime|date('Y-d-m H:i') }}'/>
+                <input class='entryInputEndTime' type='text' data-entry='{{ loop.index0 }}'
+                       value='{{ entry.endTime|date('Y-d-m H:i') }}'/>
+            {% endif %}
+
+            {% if type == "Prices" %}
+                <input class='entryInputName' type='text' data-entry='{{ loop.index0 }}' value="{{ entry.name }}"/>
+                <input type='number' class='entryInputPrice' data-entry='{{ loop.index0 }}'
+                       value="{{ entry.price }}">
+            {% endif %}
+        {% endfor %}
+
 
     </div>
     <p>Leaving a name field empty will remove the box on closing this window</p>

@@ -42,10 +42,27 @@ class MapEditorController extends Controller
 		return new Response("false");
 	}
 
-	public function mapObjectEditorAction($type)
+	public function mapObjectEditorAction($type, $id)
 	{
+		$data = array();
+
+		$object = $this->getDoctrine()->getRepository("ManagerBundle:MapObject")->find($id);
+
+		if($object) {
+			switch($type) {
+				case 'Prices':
+					$data = $object->getPriceEntries();
+					break;
+				case 'Timetable':
+					$data = $object->getLineUpEntries();
+					break;
+			}
+		}
+
+
 		return $this->render("ManagerBundle:MapObjectInfo:editorTemplate.html.twig", array(
-			'type' => $type
+			'type' => $type,
+			'entries' => $data
 		));
 	}
 } 
