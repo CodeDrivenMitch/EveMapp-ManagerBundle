@@ -13,6 +13,7 @@ use Imagick;
 use ImagickPixel;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Tempest;
 
@@ -20,7 +21,7 @@ class HeatMapController extends Controller
 {
 	const SAVE_DIR = "/var/www/html/web/bundles/manager/images/heatmap";
 
-	public function getAction($eventId, $zoom, $day, $hour, $minutes)
+	public function getAction(Request $request, $eventId, $zoom, $day, $hour, $minutes)
 	{
 		// Some sanity checks
 		if($zoom < 12) {
@@ -30,9 +31,12 @@ class HeatMapController extends Controller
 		// Require heat map library
 		require_once('lib/Tempest.php');
 		$heatMapData = array();
-		$interval = 5;
 
-		$event = $this->getDoctrine()->getRepository("ManagerBundle:Event")->find(1);
+		if($eventId == -1) {
+			$eventId = $request->getSession()->get("edit_map_event");
+		}
+
+		$event = $this->getDoctrine()->getRepository("ManagerBundle:Event")->find($eventId);
 		$bounds = $this->get('manager_o2a')->mapBoundsToArray($event->getBounds());
 
 

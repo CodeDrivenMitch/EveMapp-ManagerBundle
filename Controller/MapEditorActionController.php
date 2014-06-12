@@ -40,7 +40,11 @@ class MapEditorActionController extends Controller
 
 		$data = array(
 			'bounds' => $this->get('manager_o2a')->mapBoundsToArray($bounds),
-			'objects' => $this->get('manager_o2a')->mapObjectsToArray($objects)
+			'objects' => $this->get('manager_o2a')->mapObjectsToArray($objects),
+			'dates' => array(
+				'start' => $event->getStartDate(),
+				'end' => $event->getEndDate()
+			)
 		);
 
 		return new JsonResponse($data);

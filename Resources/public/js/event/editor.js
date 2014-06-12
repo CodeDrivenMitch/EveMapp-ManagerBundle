@@ -19,6 +19,9 @@ var takenIds = [];
 var previousZoom;
 var heatMapLayer;
 var heatMapMarker;
+var eventStartDate;
+var eventEndDate;
+var oZoom;
 
 setOverlay('loading', true, "Loading the map..");
 /**
@@ -74,18 +77,26 @@ require([
                 previousZoom = 19;
                 extent = new esri.geometry.Extent(data.bounds);
                 map.setExtent(extent);
-                var x = data.bounds.xmin + (data.bounds.xmax - data.bounds.xmin) /2;
-                var y = data.bounds.ymin + (data.bounds.ymax - data.bounds.ymin) /2;
+                var x = data.bounds.xmin + (data.bounds.xmax - data.bounds.xmin) / 2;
+                var y = data.bounds.ymin + (data.bounds.ymax - data.bounds.ymin) / 2;
+
+                eventStartDate =  new Date(data.dates.start.date);
+                eventEndDate = new Date(data.dates.end.date);
+
+                // Initialize the heat map layer
 
                 heatMapLayer = new GraphicsLayer();
                 heatMapMarker = new Graphic(esri.geometry.geographicToWebMercator(new Point(x, y)),
-                    new PictureMarkerSymbol('http://web.insidion.com/heatmap/get/' + data.bounds.zoom + '/14/1/13/35',
-                    resizeByScale(650, 19, data.bounds.zoom), resizeByScale(400, 19, data.bounds.zoom)));
+                    new PictureMarkerSymbol(
+                        'http://web.insidion.com/heatmap/get/-1/' + data.bounds.zoom + '/1/' + eventStartDate.getHours() + '/' + (eventEndDate.getMinutes() + 5),
+                        resizeByScale(650, 19, data.bounds.zoom), resizeByScale(400, 19, data.bounds.zoom)));
+                $('#heatMapDateShow').val(eventStartDate.toString());
+
+                oZoom = data.bounds.zoom;
+                initHeatMapSlider();
                 heatMapLayer.add(heatMapMarker);
-
                 map.addLayer(heatMapLayer);
-
-
+                heatMapLayer.hide();
 
                 // Add graphics to the map
                 $.each(data.objects, function (index, value) {
@@ -117,18 +128,6 @@ require([
         });
     }
 
-    function showHeatMapLayer() {
-
-    }
-
-    function hideHeatMapLayer() {
-
-    }
-
-    function createHeatMapLayer() {
-
-    }
-
     /**
      * INFO TOOL HANDLERS
      *
@@ -149,7 +148,6 @@ require([
             collapsible: true,
             heightStyle: "content"
         });
-
 
 
         // Set new sliders
@@ -394,6 +392,38 @@ require([
         map.on("zoom-end", function () {
             resizeGraphics();
         });
+
+
+
+        $('#heatMapOpacity').slider({
+            min: 0,
+            max: 1,
+            step: 0.05,
+            slide: function(event,ui) {
+                heatMapLayer.setOpacity(ui.value);
+            }
+        });
+
+        $('#heatMapSwitch').change(function(evt) {
+            var opa = $('#heatMapOpacityRow');
+            var dat = $('#heatMapDateRow');
+
+            if($(this).is(":checked")) {
+                heatMapLayer.show();
+                heatMapLayer.setOpacity(0.5);
+                $('#heatMapOpacity').slider({
+                    value: 0.5
+                });
+                opa.show();
+                dat.show();
+            } else {
+                heatMapLayer.hide();
+                opa.hide();
+                dat.hide();
+            }
+        });
+
+
 
         /**
          * TOOLBAR BUTTONS HANDLER SPECIFICATION

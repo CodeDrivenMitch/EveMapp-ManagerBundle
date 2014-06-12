@@ -108,3 +108,27 @@ function getAvailableId() {
     takenIds[takenIds.length] = newId;
     return newId;
 }
+
+function initHeatMapSlider() {
+    var slider = $('#heatMapDate');
+    var timeFrame = eventEndDate.getTime() - eventStartDate.getTime();
+    var steps = timeFrame / (5 * 60 * 1000);
+
+    slider.slider({
+        min: 0,
+        max: steps,
+        step: 1,
+        change: function(event, ui) {
+            var currentTime = new Date(eventStartDate.getTime() + ui.value * 5*60*1000);
+            $('#heatMapDateShow').val(currentTime);
+
+            var day = currentTime.getDayOfYear() - eventStartDate.getDayOfYear + 1;
+            var hour = currentTime.getHours();
+            var minutes = currentTime.getMinutes();
+
+            heatMapMarker.symbol.url = 'http://web.insidion.com/heatmap/get/-1/' + oZoom + '/' + day + '/' + hour + '/' + minutes;
+            heatMapLayer.redraw();
+        }
+    })
+
+}
