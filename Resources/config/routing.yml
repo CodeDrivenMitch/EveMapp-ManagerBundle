@@ -20,5 +20,5 @@ account_create:
 # Heatmap routes
 
 heatmap:
-  path: /heatmap/get
+  path: /heatmap/get/{eventId}/{zoom}/{day}/{hour}/{minutes}
   defaults: { _controller: ManagerBundle:HeatMap:get }

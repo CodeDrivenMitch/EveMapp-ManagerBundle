@@ -52,11 +52,11 @@ class EventBounds
     private $lngHigh;
 
 	/**
-	 * @var float
+	 * @var integer
 	 *
-	 * @ORM\Column(name="resolution", type="float")
+	 * @ORM\Column(name="zoom", type="integer")
 	 */
-	private $resolution;
+	private $zoom;
 
 	/**
      * Get id
@@ -161,25 +161,25 @@ class EventBounds
     }
 
     /**
-     * Set resolution
+     * Set zoom
      *
-     * @param float $resolution
+     * @param integer $zoom
      * @return EventBounds
      */
-    public function setResolution($resolution)
+    public function setZoom($zoom)
     {
-        $this->resolution = $resolution;
+        $this->zoom = $zoom;
 
         return $this;
     }
 
     /**
-     * Get resolution
+     * Get zoom
      *
-     * @return float 
+     * @return integer 
      */
-    public function getResolution()
+    public function getZoom()
     {
-        return $this->resolution;
+        return $this->zoom;
     }
 }

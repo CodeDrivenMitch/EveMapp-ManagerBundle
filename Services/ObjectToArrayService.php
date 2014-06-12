@@ -97,7 +97,8 @@ class ObjectToArrayService
 			'xmin' => $bounds->getLatLow(),
 			'xmax' => $bounds->getLatHigh(),
 			'ymin' => $bounds->getLngLow(),
-			'ymax' => $bounds->getLngHigh()
+			'ymax' => $bounds->getLngHigh(),
+			'zoom' => $bounds->getZoom()
 		);
 	}
 }

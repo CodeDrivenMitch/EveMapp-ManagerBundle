@@ -17,6 +17,8 @@ var selectedSubTool;
 var selectedMarker;
 var takenIds = [];
 var previousZoom;
+var heatMapLayer;
+var heatMapMarker;
 
 setOverlay('loading', true, "Loading the map..");
 /**
@@ -75,12 +77,14 @@ require([
                 var x = data.bounds.xmin + (data.bounds.xmax - data.bounds.xmin) /2;
                 var y = data.bounds.ymin + (data.bounds.ymax - data.bounds.ymin) /2;
 
-                var heatMapLayer = new GraphicsLayer();
-                var hSymbol = new PictureMarkerSymbol('http://web.insidion.com/bundles/manager/images/heatmap/2.png',
-                    650, 400);
-                var hGraphic = new Graphic(esri.geometry.geographicToWebMercator(new Point(x, y)), hSymbol);
-                heatMapLayer.add(hGraphic);
+                heatMapLayer = new GraphicsLayer();
+                heatMapMarker = new Graphic(esri.geometry.geographicToWebMercator(new Point(x, y)),
+                    new PictureMarkerSymbol('http://web.insidion.com/heatmap/get/' + data.bounds.zoom + '/14/1/13/35',
+                    resizeByScale(650, 19, data.bounds.zoom), resizeByScale(400, 19, data.bounds.zoom)));
+                heatMapLayer.add(heatMapMarker);
+
                 map.addLayer(heatMapLayer);
+
 
 
                 // Add graphics to the map
@@ -113,6 +117,17 @@ require([
         });
     }
 
+    function showHeatMapLayer() {
+
+    }
+
+    function hideHeatMapLayer() {
+
+    }
+
+    function createHeatMapLayer() {
+
+    }
 
     /**
      * INFO TOOL HANDLERS
@@ -271,6 +286,9 @@ require([
             value.symbol.width = resizeByScale(value.symbol.width, map.getZoom(), previousZoom);
             value.symbol.height = resizeByScale(value.symbol.height, map.getZoom(), previousZoom);
         });
+
+        heatMapMarker.symbol.width = resizeByScale(heatMapMarker.symbol.width, map.getZoom(), previousZoom);
+        heatMapMarker.symbol.height = resizeByScale(heatMapMarker.symbol.height, map.getZoom(), previousZoom);
 
         // Also reload sliders
         if (selectedMarker != null) {
