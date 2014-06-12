@@ -35,7 +35,7 @@ class Tempest_Imagick {
         $input_size = $input_file->getImageGeometry();
         $output_file = new Imagick();
         # note: for imagick < 2.1.0, explicitly use pixel object to specify background color
-        $output_file->newImage($input_size['width'], $input_size['height'], new ImagickPixel('white'));
+        $output_file->newImage($input_size['width'], $input_size['height'], new ImagickPixel('none'));
         $output_file->setImageFormat('png');
         
         # do any necessary preprocessing & transformation of the coordinates
@@ -122,7 +122,7 @@ class Tempest_Imagick {
             $output_file->setImageOpacity(($parent->get_opacity() / 100));
             $input_file->compositeImage(
                 $output_file,
-                imagick::COMPOSITE_DEFAULT,
+                imagick::COMPOSITE_COPY,
                 0,
                 0
             );
@@ -131,6 +131,7 @@ class Tempest_Imagick {
         }
         
         # write destination image
+	    $output_file->transparentpaintimage(new ImagickPixel('black'), 0, 0, false);
         $output_file->writeImage($parent->get_output_file());
         
         # return true if successful

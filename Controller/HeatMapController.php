@@ -9,6 +9,8 @@
 namespace EveMapp\ManagerBundle\Controller;
 
 
+use Imagick;
+use ImagickPixel;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -93,7 +95,7 @@ class HeatMapController extends Controller
 			'input_file' => $this->getBlankForZoom($eventId, $bounds['zoom'], $zoom),
 			'output_file' => $filename,
 			'coordinates' => $heatMapData,
-			'opacity' => 50
+			'opacity' => 100
 		));
 
 		$heatmap->render();
@@ -109,15 +111,17 @@ class HeatMapController extends Controller
 			mkdir($filename, 0777, true);
 		}
 
+
 		$filename = $filename . $zoom . '.png';
 
 		if (!file_exists($filename)) {
 			$width = 650 * pow(2, $zoom - $oZoom);
 			$height = 400 * pow(2, $zoom - $oZoom);
-			$img = imagecreatetruecolor($width, $height);
-			imagecolortransparent($img, imagecolorallocate($img, 0, 0, 0));
-			imagepng($img, $filename);
-			imagedestroy($img);
+			$img = new Imagick();
+			$img->newimage($width, $height, new ImagickPixel('none'));
+			$img->setImageFormat('png');
+			$img->writeimage($filename);
+			$img->destroy();
 		}
 
 		return $filename;
