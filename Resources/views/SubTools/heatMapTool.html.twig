@@ -1,0 +1,26 @@
+<div class="toolExplanation">
+    <h2>Heat Map Tool</h2>
+
+    <div class="innerExplanation">
+        During your event, or after it, you'd like to know where your visitors have been. Which are was the most
+        popular?
+        Well fret no longer! We bring you our heat map tool! <br/>
+        Use the sliders below here, after enabling the tool, to show it.
+    </div>
+</div>
+
+<div id="heatMapControl" class="subTool">
+    <div id="heatMapSwitchRow" class="heatMapControlRow">
+        <label for="heatMapSwitch">Show: </label><input id="heatMapSwitch" type="checkbox"/>
+    </div>
+    <div id="heatMapOpacityRow" class="heatMapControlRow" style="display: none;">
+        <div class="attr_slider_label">Opacity:</div>
+        <div id='heatMapOpacity' class="attr_slider"></div>
+    </div>
+    <div id="heatMapDateRow" class="heatMapControlRow" style="display: none;">
+
+        <div class="attr_slider_label">Date:</div>
+        <div id='heatMapDate' class="attr_slider"></div>
+        <input type="text" id="heatMapDateShow" placeholder="Time to show heatmap" disabled/>
+    </div>
+</div>

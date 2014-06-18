@@ -1,10 +1,11 @@
 {% extends "ManagerBundle:Events:base.html.twig" %}
 
 {% block subscripts %}
-    <script src="http://js.arcgis.com/3.9/"></script>
+
     <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
-    <script src="{{ asset('bundles/manager/js/event/bounds.js') }}"></script>
     <script src="{{ asset('bundles/manager/js/jquery.datetimepicker.js') }}"></script>
+    <script src="http://js.arcgis.com/3.9/"></script>
+    <script src="{{ asset('bundles/manager/js/event/bounds.js') }}"></script>
 {% endblock %}
 
 {% block subtitle %}Edit event{% endblock %}
@@ -46,6 +47,7 @@
         <p>
             Here you can upload an image to represent your event. This will be publicly available!
         </p>
+
         <div class="formLabel">{{ form_label(form.image.file) }}</div>
         <div class="formWidget">{{ form_widget(form.image.file) }}</div>
     </div>
@@ -59,8 +61,9 @@
             </p>
 
         </div>
-        <div id="map"></div>
+
     </div>
+    <div id="map"></div>
     <div class="formElement">
         {{ form_widget(form.bounds) }}
 

@@ -39,14 +39,7 @@ class ObjectToArrayService
 						));
 					}
 
-					// Add an empty row, so it gets shown upon opening the editor
-					if (count($entries) == 0) {
-						array_push($entries, array(
-							'id' => -1,
-							'name' => '',
-							'price' => 0
-						));
-					}
+
 					break;
 
 				case 'Timetable':
@@ -59,14 +52,7 @@ class ObjectToArrayService
 						));
 					}
 
-					if (count($entries) == 0) {
-						array_push($entries, array(
-							'id' => -1,
-							'performer' => '',
-							'startTime' => new \DateTime(),
-							'endTime' => new \DateTime()
-						));
-					}
+
 					break;
 
 			}

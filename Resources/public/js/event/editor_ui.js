@@ -71,11 +71,6 @@ function setOverlay(type, bool, msg) {
     }
 }
 
-function showErrorOverlay(msg) {
-    var overlay = $("#overlay_error");
-    $('#error_message').html(msg);
-    overlay.show();
-}
 
 /**
  * Calculates the new size of the object when transitioning zoom levels.
@@ -109,6 +104,10 @@ function getAvailableId() {
     return newId;
 }
 
+/**
+ * Initializes the heat map slider. This slider takes steps of five minutes and requests an heat map image
+ * accordingly.
+ */
 function initHeatMapSlider() {
     var slider = $('#heatMapDate');
     var timeFrame = eventEndDate.getTime() - eventStartDate.getTime();
@@ -122,11 +121,13 @@ function initHeatMapSlider() {
             var currentTime = new Date(eventStartDate.getTime() + ui.value * 5*60*1000);
             $('#heatMapDateShow').val(currentTime);
 
-            var day = currentTime.getDayOfYear() - eventStartDate.getDayOfYear + 1;
+            var day = currentTime.getDayOfYear() - eventStartDate.getDayOfYear() + 1;
             var hour = currentTime.getHours();
             var minutes = currentTime.getMinutes();
 
-            heatMapMarker.symbol.url = 'http://web.insidion.com/heatmap/get/-1/' + oZoom + '/' + day + '/' + hour + '/' + minutes;
+            var eventId = document.URL.substr(document.URL.length -1, 1);
+
+            heatMapMarker.symbol.url = 'http://web.insidion.com/heatmap/get/' + eventId + '/' + oZoom + '/' + day + '/' + hour + '/' + minutes;
             heatMapLayer.redraw();
         }
     })

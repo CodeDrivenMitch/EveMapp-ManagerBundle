@@ -12,9 +12,13 @@ use Symfony\Component\HttpFoundation\Response;
 class RequestController extends Controller
 {
 
-	public function registerAction()
+	/**
+	 * Registers the Android user with the application
+	 * @param Request $request
+	 * @return Response
+	 */
+	public function registerAction(Request $request)
 	{
-		$request = Request::createFromGlobals();
 		$userId = $request->get("id", null);
 		$friendList = $request->get("friends", null);
 		$privacy = $request->get("privacysetting", null);
@@ -191,6 +195,7 @@ class RequestController extends Controller
 			"objects" => $this->get('manager_o2a')->mapObjectsToArray($mapObjects)
 		);
 
+
 		return new JsonResponse($eventData);
 	}
 
@@ -206,11 +211,20 @@ class RequestController extends Controller
 		return $this->render('ManagerBundle:Request:request.html.twig', array("error" => $msg));
 	}
 
+	/**
+	 * Throws a parameter not found exeption for the API.
+	 * @param $par
+	 * @return Response
+	 */
 	private function throwParNotFoundException($par)
 	{
 		return $this->render('ManagerBundle:Request:request.html.twig', array("parameterNotFound" => $par));
 	}
 
+	/**
+	 * Creates a succes reponse for the API
+	 * @return Response
+	 */
 	private function createSuccessResponse()
 	{
 		return $this->render('ManagerBundle:Request:request.html.twig', array("res" => "true"));

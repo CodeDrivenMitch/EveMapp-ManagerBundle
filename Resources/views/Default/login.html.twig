@@ -2,13 +2,9 @@
 
 {% block title %}Welcome to Evemapp! {% endblock %}
 
-{% block scripts %}
-    <script src="{{ asset('bundles/manager/js/login.js') }}"></script>
-{% endblock %}
-
 {% block content %}
 
-    <div class="welcome foo">
+    <div class="welcome">
         <h1>Welcome to Evemapp!</h1>
 
         <p>
@@ -20,46 +16,51 @@
             event.
         </p>
     </div>
-    <div id="login" class="foo  left">
-        <div class="fooHeader"><h2>Log in</h2></div>
-        {% if error.message is defined %}
-            <div>{{ error.message }}</div>
-        {% endif %}
 
-        <form action="{{ path('login_check') }}" method="post">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="_username" value="{{ last_username }}"/>
+    <div id="formBlockFrame" class="blockFrame">
+        <div id="login" class="formBlock">
+            <div class="fooHeader"><h2>Log in</h2></div>
+            {% if error.message is defined %}
+                <div>{{ error.message }}</div>
+            {% endif %}
 
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="_password"/>
+            <form action="{{ path('login_check') }}" method="post">
+                <input type="text" id="username" name="_username" value="{{ last_username }}" placeholder="username" />
+                <input type="password" id="password" name="_password" placeholder="password" />
 
-            <button type="submit">login</button>
-        </form>
+                <button type="submit">login</button>
+            </form>
+        </div>
+
+        <div id="apply" class="formBlock">
+            <div class="fooHeader"><h2>Sign up!</h2></div>
+            <form action="{{ path('account_create') }}" method="post">
+                {{ form_errors(form) }}
+
+                {{ form_errors(form.user.username) }}
+                {{ form_widget(form.user.username, {'attr': {'placeholder': 'Username' }}) }}
+
+                {{ form_errors(form.user.email) }}
+                {{ form_widget(form.user.email, {'attr': {'placeholder': 'E-mail address'} }) }}
+
+                {{ form_errors(form.user.plainPassword.password) }}
+                {{ form_widget(form.user.plainPassword.password, {'attr': {'placeholder': 'Password'} }) }}
+
+                {{ form_errors(form.user.plainPassword.confirm) }}
+                {{ form_widget(form.user.plainPassword.confirm, {'attr': {'placeholder': 'Confirm Password'} }) }}
+
+                {{ form_rest(form) }}
+
+                {{ form_rest(form) }}
+                <button type="submit" class="btn btn-primary">Register</button>
+            </form>
+        </div>
     </div>
-    <div id="apply" class="foo right">
-        <div class="fooHeader"><h2>Sign up!</h2></div>
-        <form action="{{ path('account_create') }}" method="post">
-            {{ form_errors(form) }}
 
-            {{ form_errors(form.user.username) }}
-            {{ form_widget(form.user.username, {'attr': {'placeholder': 'Username'}}) }}
 
-            {{ form_errors(form.user.email) }}
-            {{ form_widget(form.user.email, {'attr': {'placeholder': 'E-mail address'} }) }}
+            <img id="promoImageFrame" src="http://placehold.it/500x500" class="blockFrame">
 
-            {{ form_errors(form.user.plainPassword.password) }}
-            {{ form_widget(form.user.plainPassword.password, {'attr': {'placeholder': 'Password'} }) }}
 
-            {{ form_errors(form.user.plainPassword.confirm) }}
-            {{ form_widget(form.user.plainPassword.confirm, {'attr': {'placeholder': 'Confirm Password'} }) }}
 
-            {{ form_rest(form) }}
-
-            {{ form_rest(form) }}
-
-            <br />
-            <button type="submit" class="btn btn-primary">Register</button>
-           </form>
-    </div>
 
 {% endblock %}

@@ -37,6 +37,8 @@ class MapEditorController extends Controller
 
 			case "dragToolButton":
 				return $this->render('ManagerBundle:SubTools:dragTool.html.twig');
+			case "heatMapToolButton":
+				return $this->render('ManagerBundle:SubTools:heatMapTool.html.twig');
 		}
 
 		return new Response("false");

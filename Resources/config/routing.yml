@@ -1,7 +1,7 @@
 # Login Routes
 login:
     pattern:  /
-    defaults: { _controller: ManagerBundle:Default:index }
+    defaults: { _controller: ManagerBundle:Account:login }
 
 login_check:
     pattern: /login_check

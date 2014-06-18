@@ -1,19 +1,20 @@
 <html>
 <head>
     <title>Editing {{ event.name }} - EveMapp WebManager</title>
-    {% stylesheets 'bundles/manager/css/*' filter='cssrewrite' %}
-    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/manager/css/main.css') }}"/>
-    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/manager/css/event_edit.css.less') }}"/>
+    {% stylesheets '@ManagerBundle/Resources/less/editor/*' filter='cssrewrite' %}
+    <link rel="stylesheet" type="text/css" href="{{ asset_url }}"/>
     {% endstylesheets %}
-
     <link rel="stylesheet" href="{{ asset('bundles/manager/css/jquery.datetimepicker.css') }}">
-    <script src="http://js.arcgis.com/3.9/"></script>
-    <script src="{{ asset('bundles/manager/js/jquery-1.10.2.js') }}"></script>
-    <script src="{{ asset('bundles/manager/js/jquery-ui-1.10.4.js') }}"></script>
-    <script src="http://malsup.github.io/jquery.form.js"></script>
-    <script src="{{ asset('bundles/manager/js/jquery.datetimepicker.js') }}"></script>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
     <link rel="stylesheet" href="http://js.arcgis.com/3.9/js/esri/css/esri.css">
+
+    <script src="{{ asset('bundles/manager/js/jquery-1.10.2.js') }}"></script>
+    <script src="{{ asset('bundles/manager/js/jquery-ui-1.10.4.js') }}"></script>
+    <script src="{{ asset('bundles/manager/js/jquery.datetimepicker.js') }}"></script>
+    <script src="http://malsup.github.io/jquery.form.js"></script>
+    <script src="http://js.arcgis.com/3.9/"></script>
+
+
     <script src="{{ asset('bundles/manager/js/event/editor_ui.js') }}"></script>
     <script src="{{ asset('bundles/manager/js/event/editor.js') }}"></script>
     <script src="{{ asset('bundles/manager/js/event/editor_ui_object.js') }}"></script>
@@ -27,6 +28,8 @@
 
     <div id="map"></div>
     <div id="toolbar">
+
+
         <div id="infoToolButton" class="toolButton tooltipAble" data-tool="info" data-tooltip="Info and Edit tool">
             <img src="{{ asset('bundles/manager/images/symbols/info.png') }}"/>
         </div>
@@ -39,44 +42,36 @@
         <div id="deleteToolButton" class="toolButton tooltipAble" data-tool="delete" data-tooltip="Delete objects">
             <img src="{{ asset('bundles/manager/images/symbols/delete.png') }}"/>
         </div>
-
-        <div id="toolSubchoice">
-            <h3>Welcome to EveMapp</h3>
-
-            <p>
-                Using EveMapp for your event has been the right choice, as you will know soon! You are
-                looking at the map builder for our mobile application. With this you can mold the entire event area
-                to your great vision.
-            </p>
-
-            <p>
-                To use it select a tool above. Every tool will supply you with an explanation of how it works, but it's
-                pretty simple! Also keep in mind, that everything is immediately saved to our servers, so you don't
-                have to worry about that!
-            </p>
-
-            <p>
-                We wish you the best of luck with organizing your event!
-            </p>
+        <div id="heatMapToolButton" class="toolButton tooltipAble" data-tool="heatMap"
+             data-tooltip="View the heatmap of your event!">
+            <img src="http://placehold.it/100x100"/>
         </div>
-        <div id="infoTooltip"></div>
-        <div id="heatMapControl">
-            <h2>HeatMap</h2>
 
-            <div id="heatMapSwitchRow" class="heatMapControlRow">
-                <label for="heatMapSwitch">Show: </label><input id="heatMapSwitch" type="checkbox"/>
-            </div>
-            <div id="heatMapOpacityRow" class="heatMapControlRow" style="display: none;">
-                Opacity: <div id='heatMapOpacity' class="attr_slider"></div>
-            </div>
-            <div id="heatMapDateRow" class="heatMapControlRow" style="display: none;">
 
-                Date:
-                <div id='heatMapDate' class="attr_slider"></div>
-                <input type="text" id="heatMapDateShow" placeholder="Time to show heatmap" disabled/>
+        <div id="toolWindow">
+            <div class="toolExplanation">
+                <h3>Welcome to EveMapp</h3>
+
+                <p>
+                    Using EveMapp for your event has been the right choice, as you will know soon! You are
+                    looking at the map builder for our mobile application. With this you can mold the entire event area
+                    to your great vision.
+                </p>
+
+                <p>
+                    To use it select a tool above. Every tool will supply you with an explanation of how it works, but
+                    it's
+                    pretty simple! Also keep in mind, that everything is immediately saved to our servers, so you don't
+                    have to worry about that!
+                </p>
+
+                <p>
+                    We wish you the best of luck with organizing your event!
+                </p>
             </div>
         </div>
 
+        <div id="infoTooltip" style="display: none;"></div>
     </div>
 
 </div>
@@ -85,7 +80,7 @@
     <div id="overlay_content">
         <div id="loading_image"><img src="{{ asset('bundles/manager/images/loading1.gif') }}"/></div>
         <div id="content_message" class="overlay_message"></div>
-        <div id="loading_message" class="overlay_message"></div>
+        <div id="loading_message" class="overlay_message">Loading Map...</div>
         <div id="error_message" class="overlay_message"></div>
     </div>
 </div>

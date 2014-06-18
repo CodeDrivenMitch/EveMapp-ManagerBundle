@@ -40,9 +40,7 @@ require([
 
     // Create the map
     map = new Map("map", {
-        basemap: "streets",
-        center: [4.53681008, 51.88391507],
-        zoom: 10
+        basemap: "streets"
     });
 
 
@@ -65,50 +63,53 @@ require([
         $.ajax({
             url: "/editor/load",
             dataType: 'json',
+            // Disable async for zooming problems
             async: false,
+
+            // On error, display the error overlay
             error: function (xhr) {
-
                 setOverlay('error', true, xhr.responseText);
-
             },
+
+            // On success load and apply all data
             success: function (data) {
-                // Set map extent and apply it
-                console.log(data);
+                // Set previous zoom to 19. All objects are saved to database with this level for size.
                 previousZoom = 19;
-                extent = new esri.geometry.Extent(data.bounds);
-                map.setExtent(extent);
+
+                // Set the map's extent
+                map.setExtent(new esri.geometry.Extent(data.bounds));
+
+                // Calculate Event center coordinates
                 var x = data.bounds.xmin + (data.bounds.xmax - data.bounds.xmin) / 2;
                 var y = data.bounds.ymin + (data.bounds.ymax - data.bounds.ymin) / 2;
 
-                eventStartDate =  new Date(data.dates.start.date);
+                // Set event dates
+                eventStartDate = new Date(data.dates.start.date);
                 eventEndDate = new Date(data.dates.end.date);
 
                 // Initialize the heat map layer
-
                 heatMapLayer = new GraphicsLayer();
                 heatMapMarker = new Graphic(esri.geometry.geographicToWebMercator(new Point(x, y)),
-                    new PictureMarkerSymbol(
-                        'http://web.insidion.com/heatmap/get/-1/' + data.bounds.zoom + '/1/' + eventStartDate.getHours() + '/' + (eventEndDate.getMinutes() + 5),
-                        resizeByScale(650, 19, data.bounds.zoom), resizeByScale(400, 19, data.bounds.zoom)));
-                $('#heatMapDateShow').val(eventStartDate.toString());
-
-                oZoom = data.bounds.zoom;
-                initHeatMapSlider();
+                    new PictureMarkerSymbol('http://web.insidion.com/heatmap/get/-1/' + data.bounds.zoom + '/1/' + eventStartDate.getHours() + '/' + (eventEndDate.getMinutes() + 5), resizeByScale(650, 19, data.bounds.zoom), resizeByScale(400, 19, data.bounds.zoom)));
                 heatMapLayer.add(heatMapMarker);
                 map.addLayer(heatMapLayer);
+                // Hide the heat map layer, since tool is not selected on load
                 heatMapLayer.hide();
+
+                oZoom = data.bounds.zoom;
+
 
                 // Add graphics to the map
                 $.each(data.objects, function (index, value) {
-                    // Make symbol
-                    var symbol = new PictureMarkerSymbol(value.image_url,
-                        value.width,
-                        value.height);
+                    // Make the symbol and set its attributes
+                    var symbol = new PictureMarkerSymbol(value.image_url, value.width, value.height);
                     symbol.setAngle(value.angle);
 
-                    // Make graphic
+                    // Make the graphic and set its attributes
                     var geom = new Point(value.lat, value.lng);
                     var graphic = new Graphic(esri.geometry.geographicToWebMercator(geom), symbol);
+
+                    // Set special Evemapp attributes
                     graphic.eveMappObjectId = value.id;
                     graphic.eveMappObjectType = value.type;
                     graphic.eveMappObjectInfo = {
@@ -122,8 +123,6 @@ require([
 
                 });
                 map.addLayer(layer);
-
-
             }
         });
     }
@@ -144,13 +143,13 @@ require([
     }
 
     function infoToolInitSliders() {
+        // Create the Accordion
         $('#accordion').accordion({
             collapsible: true,
             heightStyle: "content"
         });
 
-
-        // Set new sliders
+        // Set height slider
         $("#slider_height").slider({
             min: 1,
             max: 300,
@@ -163,6 +162,8 @@ require([
                 saveObject(selectedMarker);
             }
         });
+
+        // Set width slider
         $("#slider_width").slider({
             min: 1,
             max: 300,
@@ -176,6 +177,8 @@ require([
                 saveObject(selectedMarker);
             }
         });
+
+        // Set angle slider
         $("#slider_angle").slider({
             min: 1,
             max: 360,
@@ -188,16 +191,14 @@ require([
                 saveObject(selectedMarker);
             }
         });
+
+        // Ajaxify Image upload form
         $('#imageUploadForm').ajaxForm(function () {
             refreshImages();
         });
 
 
     }
-
-    /**
-     *  DRAG TOOL HANDLERS
-     */
 
     /**
      * On mouse move, drag tool is selected and selectedMarker is set, move the marker to the mouse position.
@@ -257,21 +258,24 @@ require([
             desc: "",
             entries: []
         };
-
         symbol.setAngle(0);
-        saveObject(graphic);
 
+        // Save it to the server to get Table_id
+        saveObject(graphic);
 
         // add to map
         layer.add(graphic);
     }
 
+    /**
+     * Sets the selected subtool. This is used in the Create window
+     * @param event
+     */
     function setSubTool(event) {
         if (selectedSubTool !== null &&
             selectedSubTool.hasClass("activeToolButton")) selectedSubTool.toggleClass("activeToolButton");
         selectedSubTool = $('#' + event.currentTarget.id);
         selectedSubTool.toggleClass("activeToolButton");
-
     }
 
 
@@ -324,15 +328,50 @@ require([
             if (data == "false") {
                 data = "";
             }
-            $("#toolSubchoice").html(data);
+            $("#toolWindow").html(data);
             $(".subToolButton").click(function (event) {
                 setSubTool(event);
 
             });
 
+            if (selectedTool == "heatMapToolButton") {
+                initHeatMapTool();
+            }
             // Set the tooltips again
             createTooltips();
         })
+    }
+
+    function initHeatMapTool() {
+        $('#heatMapOpacity').slider({
+            min: 0,
+            max: 1,
+            step: 0.05,
+            slide: function (event, ui) {
+                heatMapLayer.setOpacity(ui.value);
+            }
+        });
+
+        $('#heatMapSwitch').change(function (evt) {
+            var opa = $('#heatMapOpacityRow');
+            var dat = $('#heatMapDateRow');
+
+            if ($(this).is(":checked")) {
+                heatMapLayer.show();
+                heatMapLayer.setOpacity(0.5);
+                $('#heatMapOpacity').slider({
+                    value: 0.5
+                });
+                opa.show();
+                dat.show();
+            } else {
+                heatMapLayer.hide();
+                opa.hide();
+                dat.hide();
+            }
+        });
+
+        initHeatMapSlider();
     }
 
     /**
@@ -392,37 +431,6 @@ require([
         map.on("zoom-end", function () {
             resizeGraphics();
         });
-
-
-
-        $('#heatMapOpacity').slider({
-            min: 0,
-            max: 1,
-            step: 0.05,
-            slide: function(event,ui) {
-                heatMapLayer.setOpacity(ui.value);
-            }
-        });
-
-        $('#heatMapSwitch').change(function(evt) {
-            var opa = $('#heatMapOpacityRow');
-            var dat = $('#heatMapDateRow');
-
-            if($(this).is(":checked")) {
-                heatMapLayer.show();
-                heatMapLayer.setOpacity(0.5);
-                $('#heatMapOpacity').slider({
-                    value: 0.5
-                });
-                opa.show();
-                dat.show();
-            } else {
-                heatMapLayer.hide();
-                opa.hide();
-                dat.hide();
-            }
-        });
-
 
 
         /**
