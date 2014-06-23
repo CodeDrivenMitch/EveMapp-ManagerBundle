@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 
 
-/**+
+/**
  * Class AccountController
  * @package EveMapp\ManagerBundle\Controller
  */

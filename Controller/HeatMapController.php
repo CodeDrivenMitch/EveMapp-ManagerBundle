@@ -129,9 +129,7 @@ class HeatMapController extends Controller
 			$img->writeimage($filename);
 			$img->destroy();
 		}
-
 		return $filename;
 	}
-
 
 } 

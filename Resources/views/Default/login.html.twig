@@ -25,8 +25,8 @@
             {% endif %}
 
             <form action="{{ path('login_check') }}" method="post">
-                <input type="text" id="username" name="_username" value="{{ last_username }}" placeholder="username" />
-                <input type="password" id="password" name="_password" placeholder="password" />
+                <input type="text" id="username" name="_username" value="{{ last_username }}" placeholder="Username" />
+                <input type="password" id="password" name="_password" placeholder="Password" />
 
                 <button type="submit">login</button>
             </form>
@@ -58,7 +58,7 @@
     </div>
 
 
-            <img id="promoImageFrame" src="http://placehold.it/500x500" class="blockFrame">
+            <img id="promoImageFrame" src="{{ asset('bundles/manager/images/promo.png') }}" class="blockFrame">
 
 
 
